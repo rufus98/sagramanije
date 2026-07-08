@@ -1,8 +1,10 @@
 import { Sagra } from "@/types/sagra"
 
-const getNearbySagre = (): Sagra[] => {
-
-    return []
+// TODO: TEMPORANEO — rimuovere quando l'endpoint /nearby è pronto.
+// Usa il dataset locale come mock.
+const getNearbySagre = async (): Promise<Sagra[]> => {
+    const dataset = (await import("@/dataset/sagre_italia.json")).default
+    return (dataset as Sagra[]).slice(0, 50)
 }
 
 export const sagraService = {

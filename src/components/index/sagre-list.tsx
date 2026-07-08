@@ -1,7 +1,7 @@
 import { sagraService } from "@/services/sagra.service";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList } from "react-native";
-import { ThemedText } from "../themed-text";
+import SagraCard from "./sagra-card";
 
 export default function SagreList() {
 
@@ -13,7 +13,7 @@ export default function SagreList() {
     return (
         <FlatList 
             data={query.data}
-            renderItem={() => <ThemedText>Ciao</ThemedText>}
+            renderItem={({item}) => <SagraCard sagra={item} />}
         />
     )
 }
