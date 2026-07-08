@@ -1,21 +1,16 @@
-import { sagraService } from "@/services/sagra.service";
-import { useQuery } from "@tanstack/react-query";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import SagraCard from "./sagra-card";
+import { ThemedText } from "../themed-text";
+import { Sagra } from "@/types/sagra";
 
-export default function SagreList() {
+export default function SagreList({ data }: { data: Sagra[] }) {
 
-    const query = useQuery({
-        queryKey: ['sagre'],
-        queryFn: sagraService.getNearbySagre
-    })
 
     return (
-        <FlatList 
-            data={query.data}
-            className="mt-8"
+        <FlatList
+            data={data}
             contentContainerClassName="gap-8"
-            renderItem={({item}) => <SagraCard sagra={item} />}
+            renderItem={({ item }) => <SagraCard sagra={item} />}
         />
     )
 }
