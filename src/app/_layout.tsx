@@ -11,8 +11,11 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import AppTabs from '@/components/app-tabs';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient()
 
 export default function TabLayout() {
   const [fontsLoaded] = useFonts({
@@ -24,9 +27,11 @@ export default function TabLayout() {
   });
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <AppTabs />
-      {!fontsLoaded && <AnimatedSplashOverlay />}
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={DefaultTheme}>
+        <AppTabs />
+        {!fontsLoaded && <AnimatedSplashOverlay />}
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
