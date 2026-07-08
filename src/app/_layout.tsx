@@ -29,7 +29,7 @@ export default function TabLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DefaultTheme}>
-        <AppTabs />
+        {fontsLoaded && <AppTabs />}
         {!fontsLoaded && <AnimatedSplashOverlay />}
       </ThemeProvider>
     </QueryClientProvider>

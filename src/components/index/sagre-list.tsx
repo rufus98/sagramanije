@@ -13,6 +13,8 @@ export default function SagreList() {
     return (
         <FlatList 
             data={query.data}
+            className="mt-8"
+            contentContainerClassName="gap-8"
             renderItem={({item}) => <SagraCard sagra={item} />}
         />
     )

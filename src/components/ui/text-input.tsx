@@ -20,7 +20,7 @@ export function FilterTextInput({ placeholder = 'Cerca sagre, città o piatti...
 
             <Search color={theme.textSecondary} size={20} />
             <TextInput
-                className="flex-1 text-2xl"
+                className="flex-1 text-xl"
                 placeholder={placeholder}
                 placeholderTextColor={theme.textSecondary}
                 style={{ color: theme.text }}
