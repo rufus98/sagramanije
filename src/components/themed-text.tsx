@@ -10,10 +10,10 @@ export type ThemedTextProps = TextProps & {
 
 const typeClasses = {
   default: 'text-xl leading-6 font-jakarta-medium',
-  title: 'text-5xl leading-[52px] font-title',
-  small: 'text-sm leading-none font-jakarta-medium',
-  smallBold: 'text-sm leading-none font-jakarta-bold',
-  subtitle: 'text-2xl leading-[44px] font-title',
+  title: 'text-4xl leading-[52px] font-title',
+  small: 'text-sm font-jakarta-medium',
+  smallBold: 'text-sm font-jakarta-bold',
+  subtitle: 'text-2xl font-title',
   link: 'text-sm leading-[30px] font-jakarta',
   linkPrimary: 'text-sm leading-[30px] font-jakarta',
   code: 'text-xs font-medium android:font-bold',

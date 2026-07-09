@@ -12,9 +12,10 @@ import ListSwitcher from '@/components/index/list-switcher';
 import { useMemo, useState } from 'react';
 import useUserLocation from '@/hooks/use-user-location';
 import useDebounce from '@/hooks/use-debounce';
+import DistanceFilter from '@/components/index/distance-filter';
 
 export default function HomeScreen() {
-  const { location } = useUserLocation()
+  const { location, permission, requestLocation } = useUserLocation()
   const { data } = useQuery({
     queryKey: ['sagre', location?.lat, location?.lng],
     queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null })
@@ -22,6 +23,7 @@ export default function HomeScreen() {
 
   const [listType, setListType] = useState<"list" | "map">("list")
   const [filterText, setFilterText] = useState("")
+  const [filterDistance, setFilterDistance] = useState(-1)
   const debouncedFilterText = useDebounce(filterText, 300)
 
   //tengo in cache le sagre finchè non cambia il filtro testo nell'input o i dati originari
@@ -29,18 +31,34 @@ export default function HomeScreen() {
     return data?.filter(x => {
       const loweredBounce = debouncedFilterText.toLowerCase()
       let shouldReturn = false
-      if (x.citta?.toLowerCase().includes(loweredBounce)) shouldReturn = true
-      if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) shouldReturn = true
+
+      let distanceFilter = false
+      let cittaFilter = false
+      let nomeFilter = false
+
+      if (location) {
+        const distance = sagraService.calculateKmDistance(location?.lat, location?.lng, x.lat, x.leng)
+        const formattedDistance = sagraService.formatDistance(distance)
+        x.formattedDistance = formattedDistance
+        if(distance <= filterDistance || filterDistance === -1) distanceFilter = true
+      }
+
+      if (x.citta?.toLowerCase().includes(loweredBounce)) cittaFilter = true
+      if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) nomeFilter = true
+
+      if((distanceFilter || !location) && cittaFilter && nomeFilter) shouldReturn = true
+
       return shouldReturn
     })
-  }, [debouncedFilterText, data])
+  }, [debouncedFilterText, data, filterDistance, location])
 
   return (
     <ThemedView className='flex-1 pt-3 px-5'>
       <SafeAreaView edges={['top']} className="flex-1">
-        <IndexHeader />
+        <IndexHeader location={location} permission={permission} requestLocation={requestLocation} />
         <View className="mt-5">
           <FilterTextInput value={filterText} onChangeText={setFilterText} />
+          {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
         </View>
         <View className="flex-1">
           {/* heading della flatlist */}

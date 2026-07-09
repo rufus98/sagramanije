@@ -5,22 +5,11 @@ import { ThemedText } from "../themed-text";
 import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
-import { sagraService } from "@/services/sagra.service";
 import { Coords } from "@/hooks/use-user-location";
 
 
 
 export default function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
-
-    const formatDistance = () => {
-        if(!location) return ""
-        
-        return sagraService.formatDistance(
-            sagraService.calculateKmDistance(
-                location.lat, location.lng, sagra.lat, sagra.leng
-            )
-        )
-    }
 
     return (
         <View className="rounded-3xl bg-white overflow-hidden">
@@ -39,19 +28,19 @@ export default function SagraCard({ sagra, location }: { sagra: Sagra, location:
                         <ThemedText type="smallBold" style={{ color: "white" }}>{sagra.category}</ThemedText>
                     </View>
                     {location && <View className="bg-white rounded-full py-2 px-3">
-                        <ThemedText type="smallBold">{formatDistance()}</ThemedText>
+                        <ThemedText type="smallBold">{sagra.formattedDistance}</ThemedText>
                     </View>}
                 </View>
             </View>
             <View className="p-5">
-                <ThemedText type="subtitle">{sagra.nome_sagra}</ThemedText>
+                <ThemedText type="subtitle" className="mb-1">{sagra.nome_sagra}</ThemedText>
                 <View className="flex flex-row items-center gap-1 mb-2">
                     <MapPin size={12} color={"#8a7a6c"} />
                     <ThemedText className="mt-1" type="small" style={{ color: "#8a7a6c" }}>{sagra.citta}, {sagra.provincia}</ThemedText>
                 </View>
                 <Separator />
                 <View className="flex flex-row justify-between items-center mt-2">
-                    <View className="flex flex-row gap-2 items-end">
+                    <View className="flex flex-row gap-2 items-center">
                         <Calendar color={Colors["light"]["primary"]} size={15} />
                         <ThemedText type="smallBold">
                             {sagra.data_inizio && sagra.data_fine ?
