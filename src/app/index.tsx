@@ -46,7 +46,7 @@ export default function HomeScreen() {
       if (x.citta?.toLowerCase().includes(loweredBounce)) cittaFilter = true
       if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) nomeFilter = true
 
-      if((distanceFilter || !location) && cittaFilter && nomeFilter) shouldReturn = true
+      if((distanceFilter || !location) && (cittaFilter || nomeFilter)) shouldReturn = true
 
       return shouldReturn
     })
