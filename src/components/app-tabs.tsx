@@ -9,10 +9,11 @@ export default function AppTabs() {
       indicatorColor={Colors.backgroundElement}
       labelStyle={{ selected: { color: Colors.text } }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Sagre</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
+          src={require('@/assets/images/tabIcons/utensils-crossed.png')}
           renderingMode="template"
+          
         />
       </NativeTabs.Trigger>
 

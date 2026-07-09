@@ -31,9 +31,14 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
                 value={isUnlimited ? SLIDER_MAX : value}
                 onValueChange={(v) => setValue(v >= SLIDER_MAX ? -1 : v)}
             />
-            <ThemedText type="smallBold" themeColor="primary" className="mt-2">
-                Comprese in: {isUnlimited ? "Illimitato" : `${value} km`}
-            </ThemedText>
+            <View className="flex flex-row gap-1 mt-2">
+                <ThemedText type="smallBold">
+                    Nel raggio di: 
+                </ThemedText>
+                <ThemedText type="smallBold" themeColor="primary">
+                    {isUnlimited ? "Illimitato" : `${value} km`}
+                </ThemedText>
+            </View>
         </View>
     )
 }
