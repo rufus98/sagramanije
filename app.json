@@ -33,6 +33,12 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Serve la tua posizione per mostrarti le sagre vicine."
+        }
       ]
     ],
     "experiments": {

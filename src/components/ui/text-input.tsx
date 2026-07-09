@@ -3,7 +3,17 @@ import { TextInput, View } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
 
-export function FilterTextInput({ placeholder = 'Cerca sagre, città o piatti...' }) {
+type FilterTextInputProps = {
+    placeholder?: string;
+    value?: string;
+    onChangeText?: (text: string) => void;
+};
+
+export function FilterTextInput({
+    placeholder = 'Cerca sagre, città o piatti...',
+    value,
+    onChangeText,
+}: FilterTextInputProps) {
     const theme = useTheme();
 
     return (
@@ -24,6 +34,8 @@ export function FilterTextInput({ placeholder = 'Cerca sagre, città o piatti...
                 placeholder={placeholder}
                 placeholderTextColor={theme.textSecondary}
                 style={{ color: theme.text }}
+                value={value}
+                onChangeText={onChangeText}
             />
         </View>
     );

@@ -5,15 +5,23 @@ import { ThemedText } from "../themed-text";
 import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
+import { sagraService } from "@/services/sagra.service";
+import { Coords } from "@/hooks/use-user-location";
 
 
 
-export default function SagraCard({ sagra }: { sagra: Sagra }) {
+export default function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
 
-    function formatData(d: Date | null): string {
-        if (!d) return "";
-        return d.toLocaleDateString("it-IT", { day: "numeric", month: "short" });
+    const formatDistance = () => {
+        if(!location) return ""
+        
+        return sagraService.formatDistance(
+            sagraService.calculateKmDistance(
+                location.lat, location.lng, sagra.lat, sagra.leng
+            )
+        )
     }
+
     return (
         <View className="rounded-3xl bg-white overflow-hidden">
             <View className="h-36">
@@ -30,9 +38,9 @@ export default function SagraCard({ sagra }: { sagra: Sagra }) {
                     <View className="bg-primary rounded-full py-2 px-3">
                         <ThemedText type="smallBold" style={{ color: "white" }}>{sagra.category}</ThemedText>
                     </View>
-                    <View className="bg-white rounded-full py-2 px-3">
-                        <ThemedText type="smallBold">{sagra.provincia}</ThemedText>
-                    </View>
+                    {location && <View className="bg-white rounded-full py-2 px-3">
+                        <ThemedText type="smallBold">{formatDistance()}</ThemedText>
+                    </View>}
                 </View>
             </View>
             <View className="p-5">
