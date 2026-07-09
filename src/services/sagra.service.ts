@@ -35,7 +35,6 @@ const getNearbySagre = async ({ lat, lng }: { lat: number | null; lng: number | 
     return sagre
         .map(sagra => ({ sagra, dist: calculateKmDistance(lat, lng, sagra.lat, sagra.leng) }))
         .sort((a, b) => a.dist - b.dist)
-        .slice(0, 50)
         .map(({ sagra }) => sagra)
 }
 

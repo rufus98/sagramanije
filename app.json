@@ -33,6 +33,7 @@
     },
     "plugins": [
       "expo-router",
+      "@maplibre/maplibre-react-native",
       [
         "expo-splash-screen",
         {
@@ -44,9 +45,10 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Serve la tua posizione per mostrarti le sagre vicine."
+          "locationWhenInUsePermission": "M servess la posizjon p fart vidè li sagr chiù vicin."
         }
-      ]
+      ],
+      "@maplibre/maplibre-react-native"
     ],
     "experiments": {
       "typedRoutes": true,

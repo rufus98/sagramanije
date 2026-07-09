@@ -13,18 +13,22 @@ import { useMemo, useState } from 'react';
 import useUserLocation from '@/hooks/use-user-location';
 import useDebounce from '@/hooks/use-debounce';
 import DistanceFilter from '@/components/index/distance-filter';
+import MapLibre from '@/components/index/map';
 
 export default function HomeScreen() {
   const { location, permission, requestLocation } = useUserLocation()
-  const { data } = useQuery({
-    queryKey: ['sagre', location?.lat, location?.lng],
-    queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null })
-  })
-
   const [listType, setListType] = useState<"list" | "map">("list")
   const [filterText, setFilterText] = useState("")
   const [filterDistance, setFilterDistance] = useState(-1)
-  const debouncedFilterText = useDebounce(filterText, 300)
+  const debouncedFilterText = useDebounce(filterText, 500)
+  const debouncedFilterDistance = useDebounce(filterDistance, 1000)
+
+
+  const { data } = useQuery({
+    queryKey: ['sagre', location?.lat, location?.lng, debouncedFilterDistance],
+    queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null })
+  })
+
 
   //tengo in cache le sagre finchè non cambia il filtro testo nell'input o i dati originari
   const memoizedSagre = useMemo(() => {
@@ -72,7 +76,7 @@ export default function HomeScreen() {
           {listType === "list" ?
             <SagreList data={memoizedSagre ?? []} location={location} />
             :
-            null
+            <MapLibre location={location} data={memoizedSagre ?? []} />
           }
         </View>
       </SafeAreaView>

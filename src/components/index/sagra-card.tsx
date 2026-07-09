@@ -6,10 +6,11 @@ import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
 import { Coords } from "@/hooks/use-user-location";
+import { memo } from "react";
 
 
 
-export default function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
+function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
 
     return (
         <View className="rounded-3xl bg-white overflow-hidden">
@@ -55,3 +56,5 @@ export default function SagraCard({ sagra, location }: { sagra: Sagra, location:
         </View>
     )
 }
+
+export default memo(SagraCard)
