@@ -23,14 +23,15 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
                 minimumValue={0}
                 maximumValue={SLIDER_MAX}
                 minimumTrackTintColor={Colors["primary"]}
-                maximumTrackTintColor="#fff"
-                thumbSize={32}
+                maximumTrackTintColor={Colors["backgroundSelected"]}
+                thumbSize={30}
+
                 step={STEP}
                 // lo slider vuole una posizione reale: -1 -> ultima tacca
                 value={isUnlimited ? SLIDER_MAX : value}
                 onValueChange={(v) => setValue(v >= SLIDER_MAX ? -1 : v)}
             />
-            <ThemedText type="smallBold" themeColor="primary">
+            <ThemedText type="smallBold" themeColor="primary" className="mt-2">
                 Comprese in: {isUnlimited ? "Illimitato" : `${value} km`}
             </ThemedText>
         </View>
