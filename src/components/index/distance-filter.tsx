@@ -22,8 +22,8 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
             <Slider
                 minimumValue={0}
                 maximumValue={SLIDER_MAX}
-                minimumTrackTintColor={Colors["light"]["primary"]}
-                maximumTrackTintColor="#FFFFFF"
+                minimumTrackTintColor={Colors["primary"]}
+                maximumTrackTintColor="#fff"
                 thumbSize={32}
                 step={STEP}
                 // lo slider vuole una posizione reale: -1 -> ultima tacca

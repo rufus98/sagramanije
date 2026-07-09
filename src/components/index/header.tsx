@@ -17,14 +17,14 @@ export default function IndexHeader({permission, location, requestLocation}: Ind
         <View>
             {!permission?.granted ?
                 <TouchableOpacity onPress={requestLocation} className='flex flex-row items-start gap-2'>
-                    <MapPin color={Colors["light"]['primary']} size={20} />
+                    <MapPin color={Colors['primary']} size={20} />
                     <ThemedText type="default" themeColor='primary'>
                         Tocca per le sagre vicine
                     </ThemedText>
                 </TouchableOpacity>
             :
                 <View className='flex flex-row items-start gap-2'>
-                    <MapPin color={Colors["light"]['primary']} size={20} />
+                    <MapPin color={Colors['primary']} size={20} />
                     <ThemedText type="default" themeColor='primary'>
                         {location
                             ? `${location.locationInfo?.citta}, ${location.locationInfo?.provincia}`

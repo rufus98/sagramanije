@@ -41,7 +41,7 @@ export default function SagraCard({ sagra, location }: { sagra: Sagra, location:
                 <Separator />
                 <View className="flex flex-row justify-between items-center mt-2">
                     <View className="flex flex-row gap-2 items-center">
-                        <Calendar color={Colors["light"]["primary"]} size={15} />
+                        <Calendar color={Colors["primary"]} size={15} />
                         <ThemedText type="smallBold">
                             {sagra.data_inizio && sagra.data_fine ?
                                 `${sagra.data_inizio.toLocaleDateString("it-IT", { day: "numeric", month: "short" })} - ${sagra.data_fine.toLocaleDateString("it-IT", { day: "numeric", month: "short" })} `
