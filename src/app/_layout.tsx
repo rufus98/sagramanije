@@ -36,7 +36,7 @@ export default function TabLayout() {
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
           {fontsLoaded && <AppTabs />}
-          {!fontsLoaded && <AnimatedSplashOverlay />}
+          <AnimatedSplashOverlay appReady={fontsLoaded} />
       </KeyboardProvider>
     </QueryClientProvider>
   );

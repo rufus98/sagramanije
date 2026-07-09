@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import * as SplashScreen from 'expo-splash-screen';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Animated, { Easing, Keyframe } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -8,9 +8,19 @@ import { scheduleOnRN } from 'react-native-worklets';
 const INITIAL_SCALE_FACTOR = Dimensions.get('screen').height / 90;
 const DURATION = 600;
 
-export function AnimatedSplashOverlay() {
+export function AnimatedSplashOverlay({ appReady }: { appReady: boolean }) {
   const [animate, setAnimate] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [laidOut, setLaidOut] = useState(false);
+
+  // Nascondi la native splash solo quando l'overlay JS copre lo schermo (laidOut)
+  // e l'app sotto è pronta (appReady). Disaccoppiato dal caricamento font: così
+  // hideAsync() viene sempre chiamato, senza flash e senza race sui device veloci.
+  useEffect(() => {
+    if (appReady && laidOut && !animate) {
+      SplashScreen.hideAsync().finally(() => setAnimate(true));
+    }
+  }, [appReady, laidOut, animate]);
 
   if (!visible) return null;
 
@@ -47,13 +57,7 @@ export function AnimatedSplashOverlay() {
       {image}
     </Animated.View>
   ) : (
-    <View
-      onLayout={() => {
-        SplashScreen.hideAsync().finally(() => {
-          setAnimate(true);
-        });
-      }}
-      style={styles.splashOverlay}>
+    <View onLayout={() => setLaidOut(true)} style={styles.splashOverlay}>
       {image}
     </View>
   );
