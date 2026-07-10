@@ -14,7 +14,7 @@ import { mapUtils } from "@/utils/map-utils";
 import { Colors } from "@/constants/theme";
 
 export default function SagraPage() {
-    const { id } = useLocalSearchParams<{ id: string }>()
+    const { id, locandina } = useLocalSearchParams<{ id: string; locandina?: string }>()
     const { location } = useUserLocation()
     const insets = useSafeAreaInsets()
     const { data } = useQuery({
@@ -24,7 +24,7 @@ export default function SagraPage() {
 
     return (
         <View style={{ flex: 1 }}>
-            <SagraHero source={data?.locandina} />
+            <SagraHero source={data?.locandina ?? locandina} />
             <BackButton />
             <ThemedView className="rounded-3xl -mt-8 flex-1 px-5 py-6">
                 <ScrollView>
