@@ -20,22 +20,29 @@ export function calculateKmDistance(lat1: number, lng1: number, lat2: number, ln
     return 2 * R * Math.asin(Math.sqrt(a))
 }
 
-// TODO: TEMPORANEO — rimuovere quando l'endpoint /nearby è pronto.
-// Usa il dataset locale come mock.
-const getNearbySagre = async ({ lat, lng }: { lat: number | null; lng: number | null }): Promise<Sagra[]> => {
-    const dataset = (await import("@/dataset/sagre_italia.json")).default
-    const sagre = z.array(Sagra).parse(dataset)
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
 
-    // Senza posizione: nessun ordinamento per distanza, torniamo il dataset così com'è.
+const NearbyResponse = z.object({
+    risultati: z.array(Sagra)
+})
+
+// L'endpoint ordina già i risultati dal più vicino.
+const getNearbySagre = async ({ lat, lng, raggioKm = 100 }: { lat: number | null; lng: number | null; raggioKm?: number }): Promise<Sagra[]> => {
+    // "vicine" non ha senso senza coordinate: senza permesso posizione non c'è nulla da chiedere.
     if (lat == null || lng == null) {
-        return sagre.slice(0, 50)
+        return []
     }
 
-    // Con posizione: ordiniamo dalla più vicina e prendiamo le prime 50.
-    return sagre
-        .map(sagra => ({ sagra, dist: calculateKmDistance(lat, lng, sagra.lat, sagra.leng) }))
-        .sort((a, b) => a.dist - b.dist)
-        .map(({ sagra }) => sagra)
+
+    const url = `${API_BASE_URL}/sagre/vicine?lat=${lat}&leng=${lng}&raggio_km=${raggioKm}`
+    console.log(url)
+    const response = await fetch(url)
+
+    if (!response.ok) {
+        throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
+    }
+
+    return NearbyResponse.parse(await response.json()).risultati
 }
 
 // TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.
