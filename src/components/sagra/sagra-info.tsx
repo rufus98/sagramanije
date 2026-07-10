@@ -23,7 +23,7 @@ export default function SagraInfo({ sagra, location }: { sagra?: Sagra | null, l
                 {location && <ThemedText type="smallBold">{calculateDistance()}</ThemedText>}
             </View>
             <ThemedText type="subtitle" className="mt-4">{sagra?.nome_sagra}</ThemedText>
-            <ThemedText type="small" >{sagra?.citta}, {sagra?.provincia}</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">{sagra?.citta}, {sagra?.provincia}</ThemedText>
 
             <View className="flex flex-row justify-start gap-3 mt-5">
                 <View className="rounded-3xl bg-white p-4 flex">

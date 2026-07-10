@@ -9,7 +9,7 @@ export type ThemedTextProps = TextProps & {
 };
 
 const typeClasses = {
-  default: 'text-xl leading-6 font-jakarta-medium',
+  default: 'text-xl leading-7 font-jakarta-medium',
   title: 'text-4xl leading-[52px] font-title',
   small: 'text-sm font-jakarta-medium',
   smallBold: 'text-sm font-jakarta-bold',
