@@ -1,29 +1,28 @@
 import { Sagra } from "@/types/sagra";
-import { StyleSheet, View } from "react-native";
-import Svg, { Defs, Path, Pattern, Rect } from "react-native-svg";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
 import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
 import { Coords } from "@/hooks/use-user-location";
 import { memo } from "react";
+import ImagePlaceholder from "./image-placeholder";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 
 
 
 function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
 
+    const router = useRouter()
     return (
-        <View className="rounded-3xl bg-white overflow-hidden">
+        <TouchableOpacity onPress={() => router.navigate(`/sagra/${sagra.id}`)} className="rounded-3xl bg-white overflow-hidden">
             <View className="h-36">
-                <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
-                    <Defs>
-                        <Pattern id="stripes" width={45.254} height={45.254} patternUnits="userSpaceOnUse">
-                            <Rect width={45.254} height={45.254} fill="rgb(236,90,53)" fillOpacity={0.07} />
-                            <Path d="M0 0 L22.627 0 L0 22.627 Z M45.254 0 L45.254 22.627 L22.627 45.254 L0 45.254 Z" fill="rgb(236,90,53)" fillOpacity={0.15} />
-                        </Pattern>
-                    </Defs>
-                    <Rect width="100%" height="100%" fill="url(#stripes)" />
-                </Svg>
+                {sagra.locandina ?
+                    <Image source={sagra.locandina} style={StyleSheet.absoluteFill} />
+                    :
+                    <ImagePlaceholder />
+                }
                 <View className="flex-1 p-5 flex flex-row justify-between items-start">
                     <View className="bg-primary rounded-full py-2 px-3">
                         <ThemedText type="smallBold" style={{ color: "white" }}>{sagra.category}</ThemedText>
@@ -53,7 +52,7 @@ function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
                     </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

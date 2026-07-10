@@ -6,7 +6,7 @@ import {
   PlusJakartaSans_700Bold,
 } from '@expo-google-fonts/plus-jakarta-sans';
 import { useFonts } from 'expo-font';
-import { DefaultTheme, ThemeProvider } from 'expo-router';
+import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
@@ -35,8 +35,12 @@ export default function TabLayout() {
 
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
-          {fontsLoaded && <AppTabs />}
-          <AnimatedSplashOverlay appReady={fontsLoaded} />
+        {fontsLoaded &&
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="sagra/[id]" />
+          </Stack>}
+        <AnimatedSplashOverlay appReady={fontsLoaded} />
       </KeyboardProvider>
     </QueryClientProvider>
   );
