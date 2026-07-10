@@ -1,25 +1,50 @@
 import { Sagra } from "@/types/sagra";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
 import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
 import { Coords } from "@/hooks/use-user-location";
-import { memo } from "react";
+import { memo, useRef } from "react";
 import ImagePlaceholder from "./image-placeholder";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { Image } from "expo-image";
+import { useSharedTransition } from "@/context/shared-transition";
 
+// Deve combaciare con l'altezza dell'immagine nel dettaglio (sagra/[id].tsx).
+export const DETAIL_IMAGE_HEIGHT = 350;
 
 
 function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
-
     const router = useRouter()
+    const { start } = useSharedTransition()
+    const imageRef = useRef<View>(null)
+
+    const onPress = () => {
+        // Senza foto: niente transizione, navighiamo e basta.
+        if (!sagra.locandina || !imageRef.current) {
+            router.push(`/sagra/${sagra.id}`)
+            return
+        }
+        // Misuriamo la foto sullo schermo, poi animiamo la copia flottante
+        // fino alla posizione finale in cima al dettaglio.
+        imageRef.current.measureInWindow((x, y, width, height) => {
+            start(
+                sagra.locandina!,
+                { x, y, width, height },
+                { x: 0, y: 0, width: Dimensions.get("window").width, height: DETAIL_IMAGE_HEIGHT },
+            )
+            router.push(`/sagra/${sagra.id}`)
+        })
+    }
+
     return (
-        <TouchableOpacity onPress={() => router.navigate(`/sagra/${sagra.id}`)} className="rounded-3xl bg-white overflow-hidden">
+        <TouchableOpacity onPress={onPress} className="rounded-3xl bg-white overflow-hidden">
             <View className="h-36">
                 {sagra.locandina ?
-                    <Image source={sagra.locandina} style={StyleSheet.absoluteFill} />
+                    <View ref={imageRef} collapsable={false} style={StyleSheet.absoluteFill}>
+                        <Image source={{ uri: sagra.locandina }} style={StyleSheet.absoluteFill} />
+                    </View>
                     :
                     <ImagePlaceholder />
                 }

@@ -38,8 +38,20 @@ const getNearbySagre = async ({ lat, lng }: { lat: number | null; lng: number | 
         .map(({ sagra }) => sagra)
 }
 
+// TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.
+// Cerca la sagra nel dataset locale simulando una latenza di rete.
+const getById = async (id: string): Promise<Sagra | null> => {
+    await new Promise(resolve => setTimeout(resolve, 300))
+
+    const dataset = (await import("@/dataset/sagre_italia.json")).default
+    const sagre = z.array(Sagra).parse(dataset)
+
+    return sagre.find(sagra => sagra.id === id) ?? null
+}
+
 export const sagraService = {
     formatDistance,
     calculateKmDistance,
-    getNearbySagre
+    getNearbySagre,
+    getById
 }

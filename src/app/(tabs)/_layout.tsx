@@ -11,6 +11,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import AppTabs from '@/components/app-tabs';
+import { SharedTransitionProvider } from '@/context/shared-transition';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import * as SystemUI from 'expo-system-ui';
@@ -36,10 +37,12 @@ export default function TabLayout() {
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
         {fontsLoaded &&
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="sagra/[id]" />
-          </Stack>}
+          <SharedTransitionProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
+            </Stack>
+          </SharedTransitionProvider>}
         <AnimatedSplashOverlay appReady={fontsLoaded} />
       </KeyboardProvider>
     </QueryClientProvider>
