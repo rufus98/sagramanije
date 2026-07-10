@@ -18,7 +18,7 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
     const isUnlimited = value === -1
 
     return (
-        <View className="mt-3">
+        <View className="mt-5">
             <Slider
                 minimumValue={0}
                 maximumValue={SLIDER_MAX}
