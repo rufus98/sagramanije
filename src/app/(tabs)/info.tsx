@@ -23,7 +23,7 @@ export default function InfoScreen() {
             <FeatureCard
               icon={MapPin}
               color={Colors.primary}
-              title="Tutta Italia, in tempo reale"
+              title="Tutt l'Abbruzz, in tempo reale"
               description="Date, orari e luoghi aggiornati direttamente dalle pro loco."
             />
             <FeatureCard
