@@ -1,11 +1,3 @@
-import { BricolageGrotesque_700Bold } from '@expo-google-fonts/bricolage-grotesque';
-import {
-  PlusJakartaSans_400Regular,
-  PlusJakartaSans_500Medium,
-  PlusJakartaSans_600SemiBold,
-  PlusJakartaSans_700Bold,
-} from '@expo-google-fonts/plus-jakarta-sans';
-import { useFonts } from 'expo-font';
 import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -24,26 +16,17 @@ const queryClient = new QueryClient()
 SystemUI.setBackgroundColorAsync('#fff7ee');
 
 export default function TabLayout() {
-  const [fontsLoaded] = useFonts({
-    BricolageGrotesque_700Bold,
-    PlusJakartaSans_400Regular,
-    PlusJakartaSans_500Medium,
-    PlusJakartaSans_600SemiBold,
-    PlusJakartaSans_700Bold,
-  });
 
   return (
-
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
-        {fontsLoaded &&
-          <SharedTransitionProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
-            </Stack>
-          </SharedTransitionProvider>}
-        <AnimatedSplashOverlay appReady={fontsLoaded} />
+        <SharedTransitionProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
+          </Stack>
+        </SharedTransitionProvider>
+        <AnimatedSplashOverlay appReady={true} />
       </KeyboardProvider>
     </QueryClientProvider>
   );

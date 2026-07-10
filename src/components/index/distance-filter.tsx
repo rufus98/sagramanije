@@ -24,6 +24,7 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
                 maximumValue={SLIDER_MAX}
                 minimumTrackTintColor={Colors["primary"]}
                 maximumTrackTintColor={Colors["backgroundSelected"]}
+                thumbTintColor={Colors["primary"]}
                 thumbSize={30}
 
                 step={STEP}
