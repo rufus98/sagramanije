@@ -5,7 +5,7 @@ import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
 import { Colors } from "@/constants/theme";
 import { Coords } from "@/hooks/use-user-location";
-import { memo, useRef } from "react";
+import { memo, useRef, useState } from "react";
 import ImagePlaceholder from "./image-placeholder";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
@@ -19,6 +19,7 @@ function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
     const router = useRouter()
     const { start } = useSharedTransition()
     const imageRef = useRef<View>(null)
+    const [imageLoaded, setImageLoaded] = useState(false)
 
     const onPress = () => {
         // Senza foto: niente transizione, navighiamo e basta.
@@ -41,12 +42,16 @@ function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
     return (
         <TouchableOpacity onPress={onPress} className="rounded-3xl bg-white overflow-hidden">
             <View className="h-36">
-                {sagra.locandina ?
+                {(!sagra.locandina || !imageLoaded) && <ImagePlaceholder />}
+                {sagra.locandina &&
                     <View ref={imageRef} collapsable={false} style={StyleSheet.absoluteFill}>
-                        <Image source={{ uri: sagra.locandina }} style={StyleSheet.absoluteFill} />
+                        <Image
+                            source={{ uri: sagra.locandina }}
+                            style={StyleSheet.absoluteFill}
+                            transition={200}
+                            onLoad={() => setImageLoaded(true)}
+                        />
                     </View>
-                    :
-                    <ImagePlaceholder />
                 }
                 <View className="flex-1 p-5 flex flex-row justify-between items-start">
                     <View className="bg-primary rounded-full py-2 px-3">
