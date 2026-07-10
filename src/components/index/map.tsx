@@ -8,6 +8,7 @@ import { Sagra } from "@/types/sagra";
 import { ThemedText } from "../themed-text";
 import { Navigation, X } from "lucide-react-native";
 import { Colors } from "@/constants/theme";
+import { mapUtils } from "@/utils/map-utils";
 
 // asset del pin generato (colore primario)
 const pinIcon = require("@/assets/map/pin.png");
@@ -19,22 +20,6 @@ const ABRUZZO_BOUNDS: [number, number, number, number] = [
 
 // zoom usato quando centriamo sulla posizione dell'utente
 const USER_ZOOM = 11;
-
-// apre l'app mappe nativa con le indicazioni verso la sagra
-function openDirections(sagra: Sagra) {
-    const { lat, leng } = sagra;
-    const label = encodeURIComponent(sagra.nome_sagra);
-    const url = Platform.select({
-        ios: `http://maps.apple.com/?daddr=${lat},${leng}&q=${label}`,
-        android: `google.navigation:q=${lat},${leng}`,
-    })!;
-    // fallback web se l'app nativa non è disponibile
-    Linking.openURL(url).catch(() =>
-        Linking.openURL(
-            `https://www.google.com/maps/dir/?api=1&destination=${lat},${leng}`
-        )
-    );
-}
 
 // "8 lug" / "8 lug – 10 lug"
 function formatDateRange(sagra: Sagra) {
@@ -241,7 +226,7 @@ export default function MapLibre({ location, data }: { location: Coords, data: S
                     {!!dateRange && <ThemedText type="small">{dateRange}</ThemedText>}
 
                     <Pressable
-                        onPress={() => openDirections(selected)}
+                        onPress={() => mapUtils.openDirections(selected)}
                         className="mt-3 flex-row items-center justify-center gap-2 rounded-xl bg-primary py-3"
                     >
                         <Navigation size={16} color="#fff" fill="#fff" />
