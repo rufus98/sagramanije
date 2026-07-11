@@ -36,7 +36,6 @@ export default function HomeScreen() {
       const loweredBounce = debouncedFilterText.toLowerCase()
       let shouldReturn = false
 
-      let distanceFilter = false
       let cittaFilter = false
       let nomeFilter = false
 
@@ -44,17 +43,16 @@ export default function HomeScreen() {
         const distance = sagraService.calculateKmDistance(location?.lat, location?.lng, x.lat, x.leng)
         const formattedDistance = sagraService.formatDistance(distance)
         x.formattedDistance = formattedDistance
-        if(distance <= filterDistance || filterDistance === -1) distanceFilter = true
       }
 
       if (x.citta?.toLowerCase().includes(loweredBounce)) cittaFilter = true
       if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) nomeFilter = true
 
-      if((distanceFilter || !location) && (cittaFilter || nomeFilter)) shouldReturn = true
+      if(cittaFilter || nomeFilter) shouldReturn = true
 
       return shouldReturn
     })
-  }, [debouncedFilterText, data, filterDistance, location])
+  }, [debouncedFilterText,debouncedFilterDistance, data, location])
 
   return (
     <ThemedView className='flex-1 pt-3 px-5'>

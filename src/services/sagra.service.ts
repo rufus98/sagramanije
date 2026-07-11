@@ -27,15 +27,11 @@ const NearbyResponse = z.object({
 })
 
 // L'endpoint ordina già i risultati dal più vicino.
-const getNearbySagre = async ({ lat, lng, raggioKm = 100 }: { lat: number | null; lng: number | null; raggioKm?: number }): Promise<Sagra[]> => {
-    // "vicine" non ha senso senza coordinate: senza permesso posizione non c'è nulla da chiedere.
-    if (lat == null || lng == null) {
-        return []
-    }
+const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }): Promise<Sagra[]> => {
 
+    let url = `${API_BASE_URL}/sagre/vicine?lat=${lat}&leng=${lng}`
+    if(raggioKm !== -1) url+= `&raggio_km=${raggioKm}`
 
-    const url = `${API_BASE_URL}/sagre/vicine?lat=${lat}&leng=${lng}&raggio_km=${raggioKm}`
-    console.log(url)
     const response = await fetch(url)
 
     if (!response.ok) {
