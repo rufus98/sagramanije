@@ -4,7 +4,7 @@ import IndexHeader from '@/components/index/header';
 import SagreList from '@/components/index/sagre-list';
 import { ThemedView } from '@/components/themed-view';
 import { FilterTextInput } from '@/components/ui/text-input';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { sagraService } from '@/services/sagra.service';
 import { ThemedText } from '@/components/themed-text';
@@ -14,6 +14,8 @@ import useUserLocation from '@/hooks/use-user-location';
 import useDebounce from '@/hooks/use-debounce';
 import DistanceFilter from '@/components/index/distance-filter';
 import MapLibre from '@/components/index/map';
+import ErrorState from '@/components/ui/error-state';
+import { Colors } from '@/constants/theme';
 
 export default function HomeScreen() {
   const { location, permission, requestLocation } = useUserLocation()
@@ -24,9 +26,9 @@ export default function HomeScreen() {
   const debouncedFilterDistance = useDebounce(filterDistance, 1000)
 
 
-  const { data } = useQuery({
+  const { data, isPending, isError, isFetching, refetch } = useQuery({
     queryKey: ['sagre', location?.lat, location?.lng, debouncedFilterDistance],
-    queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null })
+    queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null, raggioKm: debouncedFilterDistance })
   })
 
 
@@ -66,16 +68,22 @@ export default function HomeScreen() {
           {/* heading della flatlist */}
           <View className="flex flex-row justify-between my-8 items-center">
             <View className="flex flex-row gap-1">
-              <ThemedText type="smallBold" themeColor="primary">{memoizedSagre?.length}</ThemedText>
+              <ThemedText type="smallBold" themeColor="primary">{memoizedSagre?.length ?? 0}</ThemedText>
               <ThemedText type="smallBold">sagre vicine</ThemedText>
             </View>
             <ListSwitcher isMap={listType === "map"} setListType={setListType} />
           </View>
-          {listType === "list" ?
+          {isError ? (
+            <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />
+          ) : isPending ? (
+            <View className="flex-1 items-center justify-center">
+              <ActivityIndicator color={Colors.primary} />
+            </View>
+          ) : listType === "list" ? (
             <SagreList data={memoizedSagre ?? []} location={location} />
-            :
+          ) : (
             <MapLibre location={location} data={memoizedSagre ?? []} />
-          }
+          )}
         </View>
       </SafeAreaView>
     </ThemedView>
