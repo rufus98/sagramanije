@@ -54,7 +54,7 @@ export const Sagra = z.object({
     formattedDistance: z.string().nullish()
 }).transform((s) => ({
     ...s,
-    id: hashId(`${s.nome_sagra}|${s.citta}|${s.data_inizio?.toISOString()}`)
+    id: hashId(`${s.nome_sagra}|${s.citta}|${s.data_inizio?.toISOString()}`) //TODO sostituire con id dalle api di Andrea
 }));
 
 export type Sagra = z.infer<typeof Sagra>;
