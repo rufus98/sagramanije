@@ -84,8 +84,6 @@ export function ReportSagraModal({ visible, onClose }: ReportSagraModalProps) {
     )}&body=${encodeURIComponent(body)}`;
 
     try {
-      const canOpen = await Linking.canOpenURL(url);
-      if (!canOpen) throw new Error('no mail client');
       await Linking.openURL(url);
       handleClose();
     } catch {
