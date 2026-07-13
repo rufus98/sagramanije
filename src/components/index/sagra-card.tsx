@@ -29,7 +29,7 @@ function SagraCard({ sagra }: { sagra: Sagra }) {
         }
         // Passiamo la locandina (già in cache) al dettaglio così l'hero
         // la mostra subito senza aspettare getById: niente "scatto".
-        const href = { pathname: "/sagra/[id]" as const, params: { id: sagra.id, locandina: sagra.locandina } }
+        const href = { pathname: "/sagra/[id]" as const, params: { id: sagra.id, locandina: sagra.locandina, distanza: sagra.distanza_km } }
         // Misuriamo la foto sullo schermo, poi animiamo la copia flottante
         // fino alla posizione finale in cima al dettaglio.
         imageRef.current.measureInWindow((x, y, width, height) => {

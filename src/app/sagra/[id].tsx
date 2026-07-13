@@ -1,21 +1,19 @@
-import { ThemedView } from "@/components/themed-view";
 import BackButton from "@/components/sagra/back-button";
 import SagraHero from "@/components/sagra/sagra-hero";
 import SagraInfo from "@/components/sagra/sagra-info";
-import useUserLocation from "@/hooks/use-user-location";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Colors } from "@/constants/theme";
 import { sagraService } from "@/services/sagra.service";
+import { mapUtils } from "@/utils/map-utils";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MapPin } from "lucide-react-native";
-import { mapUtils } from "@/utils/map-utils";
-import { Colors } from "@/constants/theme";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function SagraPage() {
-    const { id, locandina } = useLocalSearchParams<{ id: string; locandina?: string }>()
-    const { location } = useUserLocation()
+    const { id, locandina, distanza } = useLocalSearchParams<{ id: string; locandina?: string; distanza?: string }>()
     const insets = useSafeAreaInsets()
     const { data } = useQuery({
         queryKey: ["sagra", id],
@@ -28,7 +26,7 @@ export default function SagraPage() {
             <BackButton />
             <ThemedView className="rounded-3xl -mt-8 flex-1 px-5 py-6">
                 <ScrollView>
-                    <SagraInfo sagra={data} location={location} />
+                    <SagraInfo sagra={data} distanza={distanza ? Number(distanza) : undefined} />
                 </ScrollView>
             </ThemedView>
 

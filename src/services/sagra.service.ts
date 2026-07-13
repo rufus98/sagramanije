@@ -24,14 +24,15 @@ const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng:
         if(raggioKm !== -1) url+= `&raggio_km=${raggioKm}`
     }
 
-    console.log(url)
     const response = await fetch(url)
 
     if (!response.ok) {
         throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
     }
 
-    return NearbyResponse.parse(await response.json()).risultati
+    const data = await response.json()
+
+    return NearbyResponse.parse(data).risultati
 }
 
 // TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.
@@ -43,8 +44,7 @@ const getById = async (id: string): Promise<Sagra> => {
     if (!response.ok) {
         throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
     }
-
-    const sagra = Sagra.parse(response)
+    const sagra = Sagra.parse(await response.json())
 
     return sagra
 }

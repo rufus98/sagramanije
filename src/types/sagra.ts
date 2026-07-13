@@ -52,9 +52,9 @@ export const Sagra = z.object({
     locandina: z.url().nullable(),
     link_pagina_ufficiale: z.url().nullable(),
     category: z.string(),
-    descrizione: z.string(),
+    descrizione: z.string().nullable(),
     ora_inizio: z.string().nullable(),
-    distanza_km: z.number().nullable()
+    distanza_km: z.number().nullable().nullish()
 })
 
 export type Sagra = z.infer<typeof Sagra>;

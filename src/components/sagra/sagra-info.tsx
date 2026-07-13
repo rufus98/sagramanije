@@ -1,5 +1,4 @@
 import { Colors } from "@/constants/theme";
-import { Coords } from "@/hooks/use-user-location";
 import { formatDistance } from "@/services/sagra.service";
 import { Sagra } from "@/types/sagra";
 import { Calendar } from "lucide-react-native";
@@ -9,14 +8,13 @@ import { ThemedText } from "../themed-text";
 import SagraMap from "./sagra-map";
 
 // Riga informativa in cima al contenuto: categoria e distanza.
-export default function SagraInfo({ sagra, location }: { sagra?: Sagra | null, location: Coords }) {
-
+export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, distanza?: number }) {
 
     return (
         <View>
             <View className="flex flex-row justify-between">
                 <ThemedText themeColor="primary" type="smallBold">{sagra?.category.toUpperCase()}</ThemedText>
-                {sagra?.distanza_km && <ThemedText type="smallBold">{formatDistance(sagra.distanza_km)}</ThemedText>}
+                {distanza && <ThemedText type="smallBold">{formatDistance(distanza)}</ThemedText>}
             </View>
             <ThemedText type="subtitle" className="mt-4">{sagra?.nome_sagra}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">{sagra?.citta}, {sagra?.provincia}</ThemedText>
@@ -28,10 +26,10 @@ export default function SagraInfo({ sagra, location }: { sagra?: Sagra | null, l
                     {sagra && <DateFormatter sagra={sagra} />}
                 </View>
             </View>
-            <View className="mt-5">
+            {sagra?.descrizione && <View className="mt-5">
                 <ThemedText className="font-title">La sagra</ThemedText>
-                <ThemedText className="mt-3" type="code">Lorem ipsum</ThemedText>
-            </View>
+                <ThemedText className="mt-3" type="code">{sagra?.descrizione}</ThemedText>
+            </View>}
             {sagra && (
                 <View className="mt-5">
                     <ThemedText className="font-title mb-3">Dove</ThemedText>
