@@ -59,7 +59,8 @@
           "locationWhenInUsePermission": "M servess la posizjon p fart vidè li sagr chiù vicin."
         }
       ],
-      "@maplibre/maplibre-react-native"
+      "@maplibre/maplibre-react-native",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
