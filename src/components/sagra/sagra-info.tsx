@@ -1,26 +1,22 @@
-import { Coords } from "@/hooks/use-user-location";
-import { Sagra } from "@/types/sagra";
-import { View } from "react-native";
-import { ThemedText } from "../themed-text";
-import { calculateKmDistance, formatDistance } from "@/services/sagra.service";
-import { Calendar } from "lucide-react-native";
 import { Colors } from "@/constants/theme";
+import { Coords } from "@/hooks/use-user-location";
+import { formatDistance } from "@/services/sagra.service";
+import { Sagra } from "@/types/sagra";
+import { Calendar } from "lucide-react-native";
+import { View } from "react-native";
 import DateFormatter from "../date-formatter";
+import { ThemedText } from "../themed-text";
 import SagraMap from "./sagra-map";
 
 // Riga informativa in cima al contenuto: categoria e distanza.
 export default function SagraInfo({ sagra, location }: { sagra?: Sagra | null, location: Coords }) {
 
-    const calculateDistance = () => {
-        if(!location || !sagra?.lat || !sagra.leng) return ""
-        const distance = calculateKmDistance(location?.lat, location?.lng, sagra?.lat, sagra?.leng)
-        return formatDistance(distance)
-    }
+
     return (
         <View>
             <View className="flex flex-row justify-between">
                 <ThemedText themeColor="primary" type="smallBold">{sagra?.category.toUpperCase()}</ThemedText>
-                {location && <ThemedText type="smallBold">{calculateDistance()}</ThemedText>}
+                {sagra?.distanza_km && <ThemedText type="smallBold">{formatDistance(sagra.distanza_km)}</ThemedText>}
             </View>
             <ThemedText type="subtitle" className="mt-4">{sagra?.nome_sagra}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">{sagra?.citta}, {sagra?.provincia}</ThemedText>

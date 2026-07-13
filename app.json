@@ -8,7 +8,7 @@
     "scheme": "sagramanije",
     "userInterfaceStyle": "light",
     "ios": {
-      "bundleIdentifier": "com.anonymous.sagramanije"
+      "bundleIdentifier": "it.sagramanije.app"
     },
     "android": {
       "backgroundColor": "#fff7ee",
@@ -23,7 +23,7 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.anonymous.sagramanije"
+      "package": "it.sagramanije.app"
     },
     "web": {
       "output": "static",

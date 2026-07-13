@@ -41,6 +41,7 @@ function parseData(value: unknown): Date | null {
 const dataSchema = z.preprocess(parseData, z.date().nullable());
 
 export const Sagra = z.object({
+    id: z.number(),
     nome_sagra: z.string(),
     data_inizio: dataSchema,
     data_fine: dataSchema,
@@ -51,10 +52,9 @@ export const Sagra = z.object({
     locandina: z.url().nullable(),
     link_pagina_ufficiale: z.url().nullable(),
     category: z.string(),
-    formattedDistance: z.string().nullish()
-}).transform((s) => ({
-    ...s,
-    id: hashId(`${s.nome_sagra}|${s.citta}|${s.data_inizio?.toISOString()}`) //TODO sostituire con id dalle api di Andrea
-}));
+    descrizione: z.string(),
+    ora_inizio: z.string().nullable(),
+    distanza_km: z.number().nullable()
+})
 
 export type Sagra = z.infer<typeof Sagra>;

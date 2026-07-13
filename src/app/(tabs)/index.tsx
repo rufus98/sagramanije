@@ -1,21 +1,21 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import IndexHeader from '@/components/index/header';
-import SagreList from '@/components/index/sagre-list';
-import { ThemedView } from '@/components/themed-view';
-import { FilterTextInput } from '@/components/ui/text-input';
-import { ActivityIndicator, View } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
-import { sagraService } from '@/services/sagra.service';
-import { ThemedText } from '@/components/themed-text';
-import ListSwitcher from '@/components/index/list-switcher';
-import { useMemo, useState } from 'react';
-import useUserLocation from '@/hooks/use-user-location';
-import useDebounce from '@/hooks/use-debounce';
 import DistanceFilter from '@/components/index/distance-filter';
+import IndexHeader from '@/components/index/header';
+import ListSwitcher from '@/components/index/list-switcher';
 import MapLibre from '@/components/index/map';
+import SagreList from '@/components/index/sagre-list';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import ErrorState from '@/components/ui/error-state';
+import { FilterTextInput } from '@/components/ui/text-input';
 import { Colors } from '@/constants/theme';
+import useDebounce from '@/hooks/use-debounce';
+import useUserLocation from '@/hooks/use-user-location';
+import { sagraService } from '@/services/sagra.service';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function HomeScreen() {
   const { location, permission, requestLocation } = useUserLocation()
@@ -40,12 +40,6 @@ export default function HomeScreen() {
 
       let cittaFilter = false
       let nomeFilter = false
-
-      if (location) {
-        const distance = sagraService.calculateKmDistance(location?.lat, location?.lng, x.lat, x.leng)
-        const formattedDistance = sagraService.formatDistance(distance)
-        x.formattedDistance = formattedDistance
-      }
 
       if (x.citta?.toLowerCase().includes(loweredBounce)) cittaFilter = true
       if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) nomeFilter = true
@@ -80,7 +74,7 @@ export default function HomeScreen() {
               <ActivityIndicator color={Colors.primary} />
             </View>
           ) : listType === "list" ? (
-            <SagreList data={memoizedSagre ?? []} location={location} />
+            <SagreList data={memoizedSagre ?? []} />
           ) : (
             <MapLibre location={location} data={memoizedSagre ?? []} />
           )}

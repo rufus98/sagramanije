@@ -1,10 +1,8 @@
+import { Sagra } from "@/types/sagra";
 import { FlatList } from "react-native";
 import SagraCard from "./sagra-card";
-import { Sagra } from "@/types/sagra";
-import { Coords } from "@/hooks/use-user-location";
-import { useMemo } from "react";
 
-export default function SagreList({ data, location }: { data: Sagra[], location: Coords }) {
+export default function SagreList({ data }: { data: Sagra[] }) {
 
     return (
         <FlatList
@@ -15,7 +13,7 @@ export default function SagreList({ data, location }: { data: Sagra[], location:
             contentInsetAdjustmentBehavior="automatic"
             contentContainerClassName="gap-8 pb-8"
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <SagraCard sagra={item} location={location} />}
+            renderItem={({ item }) => <SagraCard sagra={item} />}
         />
     )
 }

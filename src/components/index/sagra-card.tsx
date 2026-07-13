@@ -1,21 +1,21 @@
+import { Colors } from "@/constants/theme";
+import { useSharedTransition } from "@/context/shared-transition";
+import { formatDistance } from "@/services/sagra.service";
 import { Sagra } from "@/types/sagra";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { Calendar, MapPin } from "lucide-react-native";
+import { memo, useRef, useState } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
-import { Calendar, MapPin } from "lucide-react-native";
 import Separator from "../ui/separator";
-import { Colors } from "@/constants/theme";
-import { Coords } from "@/hooks/use-user-location";
-import { memo, useRef, useState } from "react";
 import ImagePlaceholder from "./image-placeholder";
-import { useRouter } from "expo-router";
-import { Image } from "expo-image";
-import { useSharedTransition } from "@/context/shared-transition";
 
 // Deve combaciare con l'altezza dell'immagine nel dettaglio (sagra/[id].tsx).
 export const DETAIL_IMAGE_HEIGHT = 350;
 
 
-function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
+function SagraCard({ sagra }: { sagra: Sagra }) {
     const router = useRouter()
     const { start } = useSharedTransition()
     const imageRef = useRef<View>(null)
@@ -60,8 +60,8 @@ function SagraCard({ sagra, location }: { sagra: Sagra, location: Coords }) {
                     <View className="bg-primary rounded-full py-2 px-3">
                         <ThemedText type="smallBold" style={{ color: "white" }}>{sagra.category}</ThemedText>
                     </View>
-                    {location && <View className="bg-white rounded-full py-2 px-3">
-                        <ThemedText type="smallBold">{sagra.formattedDistance}</ThemedText>
+                    {sagra.distanza_km && <View className="bg-white rounded-full py-2 px-3">
+                        <ThemedText type="smallBold">{formatDistance(sagra.distanza_km)}</ThemedText>
                     </View>}
                 </View>
             </View>
