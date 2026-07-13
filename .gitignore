@@ -40,9 +40,10 @@ example
 
 # generated native folders
 /ios
-/android
+
 
 
 #others
 .claude/
 .vscode/
+credentials.json
