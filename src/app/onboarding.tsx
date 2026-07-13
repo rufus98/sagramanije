@@ -31,7 +31,7 @@ const SLIDES: Slide[] = [
     it: {
       title: 'Le sagre vicine a te',
       description:
-        'Tutte le sagre d\'Italia in un posto solo, ordinate da quella che ti costa meno strada.',
+        'Tutte le sagre d\'Abruzzo in un posto solo, ordinate da quella che ti costa meno strada.',
     },
     ab: {
       title: 'Li sagr qua vicìn',
