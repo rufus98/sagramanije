@@ -28,7 +28,7 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
             </View>
             {sagra?.descrizione && <View className="mt-5">
                 <ThemedText className="font-title">La sagra</ThemedText>
-                <ThemedText className="mt-3" type="code">{sagra?.descrizione}</ThemedText>
+                <ThemedText className="mt-3" type="default" themeColor="textSecondary">{sagra?.descrizione}</ThemedText>
             </View>}
             {sagra && (
                 <View className="mt-5">

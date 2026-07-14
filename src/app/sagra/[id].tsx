@@ -30,7 +30,7 @@ export default function SagraPage() {
                 </ScrollView>
             </ThemedView>
 
-            {(data && data.lat) && <View className="bg-white px-3 pt-4 " style={{paddingBottom: insets.bottom}}>
+            {(data && data.lat) && <View className="bg-white px-3 pt-4 mb-2" style={{paddingBottom: insets.bottom}}>
                 <TouchableOpacity onPress={() => mapUtils.openDirections(data)} className="w-2/3 m-auto py-5 bg-primary rounded-3xl flex flex-row gap-3 items-center justify-center"
                     style={{
                         shadowColor: Colors.primary,
