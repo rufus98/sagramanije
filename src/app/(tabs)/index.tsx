@@ -16,6 +16,7 @@ import { sagraService } from '@/services/sagra.service';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 export default function HomeScreen() {
   const { location, permission, requestLocation } = useUserLocation()
@@ -44,21 +45,22 @@ export default function HomeScreen() {
       if (x.citta?.toLowerCase().includes(loweredBounce)) cittaFilter = true
       if (x.nome_sagra?.toLowerCase().includes(loweredBounce)) nomeFilter = true
 
-      if(cittaFilter || nomeFilter) shouldReturn = true
+      if (cittaFilter || nomeFilter) shouldReturn = true
 
       return shouldReturn
     })
-  }, [debouncedFilterText,debouncedFilterDistance, data, location])
+  }, [debouncedFilterText, debouncedFilterDistance, data, location])
 
   return (
     <ThemedView className='flex-1 pt-3 px-5'>
       <SafeAreaView edges={['top']} className="flex-1">
-        <IndexHeader location={location} permission={permission} requestLocation={requestLocation} />
-        <View className="mt-5">
-          <FilterTextInput value={filterText} onChangeText={setFilterText} />
-          {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
-        </View>
-        <View className="flex-1">
+        <KeyboardAwareScrollView className='flex-1 overflow-visible'>
+
+          <IndexHeader location={location} permission={permission} requestLocation={requestLocation} />
+          <View className="mt-5">
+            <FilterTextInput value={filterText} onChangeText={setFilterText} />
+            {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
+          </View>
           {/* heading della flatlist */}
           <View className="flex flex-row justify-between my-8 items-center">
             <View className="flex flex-row gap-1">
@@ -67,6 +69,8 @@ export default function HomeScreen() {
             </View>
             <ListSwitcher isMap={listType === "map"} setListType={setListType} />
           </View>
+        </KeyboardAwareScrollView>
+        <View className="flex-1">
           {isError ? (
             <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />
           ) : isPending ? (
@@ -81,5 +85,6 @@ export default function HomeScreen() {
         </View>
       </SafeAreaView>
     </ThemedView>
+
   );
 }

@@ -7,6 +7,7 @@ import { SharedTransitionProvider } from '@/context/shared-transition';
 import { useHasSeenOnboarding } from '@/hooks/use-onboarding';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { StatusBar } from 'react-native';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -24,6 +25,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
+        <StatusBar barStyle={"dark-content"} />
         <SharedTransitionProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Protected guard={hasSeenOnboarding}>
