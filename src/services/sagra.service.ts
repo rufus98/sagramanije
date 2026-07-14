@@ -32,7 +32,14 @@ const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng:
 
     const data = await response.json()
 
-    return NearbyResponse.parse(data).risultati
+    const parsed = NearbyResponse.safeParse(data)
+
+    if (!parsed.success) {
+        console.error(`Sagre vicine — risposta non valida:\n${z.prettifyError(parsed.error)}`)
+        throw parsed.error
+    }
+
+    return parsed.data.risultati
 }
 
 // TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.

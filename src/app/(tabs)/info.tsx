@@ -1,5 +1,5 @@
-import { FeatureCard } from '@/components/info/feature-card';
 import { ContactCard, ContactRow } from '@/components/info/contact-card';
+import { FeatureCard } from '@/components/info/feature-card';
 import { ReportSagraModal } from '@/components/info/report-sagra-modal';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -14,7 +14,7 @@ export default function InfoScreen() {
 
   return (
     <ThemedView className="flex-1">
-      <SafeAreaView>
+      <SafeAreaView edges={['top']} className="flex-1">
         <ScrollView className="px-5 pt-3" showsVerticalScrollIndicator={false}>
           <ThemedText type="title">Chi siamo</ThemedText>
           <ThemedText className="mt-2" themeColor="textSecondary">

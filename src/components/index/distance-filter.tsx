@@ -20,7 +20,7 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
     return (
         <View className="mt-5">
             <Slider
-                minimumValue={0}
+                minimumValue={5}
                 maximumValue={SLIDER_MAX}
                 minimumTrackTintColor={Colors["primary"]}
                 maximumTrackTintColor={Colors["backgroundSelected"]}
