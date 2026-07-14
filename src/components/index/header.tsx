@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/theme";
-import { MapPin } from "lucide-react-native";
+import { ChevronRight, MapPin } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
 import useUserLocation, { Coords } from "@/hooks/use-user-location";
@@ -16,11 +16,18 @@ export default function IndexHeader({permission, location, requestLocation}: Ind
     return (
         <View>
             {!permission?.granted ?
-                <TouchableOpacity onPress={requestLocation} className='flex flex-row items-start gap-2'>
-                    <MapPin color={Colors['primary']} size={20} />
-                    <ThemedText type="default" themeColor='primary'>
+                <TouchableOpacity
+                    onPress={requestLocation}
+                    activeOpacity={0.8}
+                    accessibilityRole="button"
+                    className='flex flex-row items-center self-start gap-2 mb-2 px-3 py-2 rounded-full border'
+                    style={{ backgroundColor: '#ec5a351a', borderColor: Colors['primary'] }}
+                >
+                    <MapPin color={Colors['primary']} size={18} />
+                    <ThemedText type="smallBold" themeColor='primary'>
                         Tocca per le sagre vicine
                     </ThemedText>
+                    <ChevronRight color={Colors['primary']} size={16} />
                 </TouchableOpacity>
             :
                 <View className='flex flex-row items-start gap-2'>
