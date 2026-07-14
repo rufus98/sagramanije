@@ -54,7 +54,7 @@ export default function HomeScreen() {
   return (
     <ThemedView className='flex-1 pt-3 px-5'>
       <SafeAreaView edges={['top']} className="flex-1">
-        <KeyboardAwareScrollView className='flex-1 overflow-visible'>
+        <KeyboardAwareScrollView mode="layout" className='grow-0 overflow-visible'>
 
           <IndexHeader location={location} permission={permission} requestLocation={requestLocation} />
           <View className="mt-5">
