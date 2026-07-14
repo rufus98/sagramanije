@@ -10,6 +10,7 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
 import Separator from "../ui/separator";
 import ImagePlaceholder from "./image-placeholder";
+import DateFormatter from "../date-formatter";
 
 // Deve combaciare con l'altezza dell'immagine nel dettaglio (sagra/[id].tsx).
 export const DETAIL_IMAGE_HEIGHT = 350;
@@ -75,13 +76,7 @@ function SagraCard({ sagra }: { sagra: Sagra }) {
                 <View className="flex flex-row justify-between items-center mt-2">
                     <View className="flex flex-row gap-2 items-center">
                         <Calendar color={Colors["primary"]} size={15} />
-                        <ThemedText type="smallBold">
-                            {sagra.data_inizio && sagra.data_fine ?
-                                `${sagra.data_inizio.toLocaleDateString("it-IT", { day: "numeric", month: "short" })} - ${sagra.data_fine.toLocaleDateString("it-IT", { day: "numeric", month: "short" })} `
-                                :
-                                "Data non disponibile"
-                            }
-                        </ThemedText>
+                        <DateFormatter sagra={sagra} />
                     </View>
                 </View>
             </View>
