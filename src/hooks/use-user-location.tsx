@@ -58,18 +58,24 @@ export default function useUserLocation() {
 
     // chiamare per richiedere la posizione
     const requestLocation = useCallback(async () => {
-        if (permission?.granted) {
-            fetchLocation();
+        // non leggo `permission` in cache per decidere se mostrare il popup (può
+        // essere null al mount o stale dopo un "chiedi ogni volta" scaduto):
+        // requestPermission ritorna sempre lo stato aggiornato.
+        const wasGranted = permission?.granted;
+        const current = await requestPermission();
+
+        if (current.granted) {
+            // se era già concesso l'effect non riscatta (granted non cambia):
+            // faccio io il fetch. Se è appena stato concesso ci pensa l'effect,
+            // così evito la doppia chiamata.
+            if (wasGranted) fetchLocation();
             return;
         }
-        if (permission?.canAskAgain) {
-            // possiamo ancora mostrare il popup di sistema
-            await requestPermission();
-            return;
+        if (!current.canAskAgain) {
+            // ha rifiutato in modo permanente: unica via sono le impostazioni
+            Linking.openSettings();
         }
-        // se ha rifiutato in precedenza lo rimando alle impostazioni
-        Linking.openSettings();
-    }, [permission]);
+    }, [permission?.granted, requestPermission, fetchLocation]);
 
     return { location, permission, requestLocation };
 }
