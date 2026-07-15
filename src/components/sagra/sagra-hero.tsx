@@ -1,7 +1,8 @@
+import ImagePlaceholder from "@/components/index/image-placeholder";
 import { DETAIL_IMAGE_HEIGHT } from "@/components/index/sagra-card";
 import { Image } from "expo-image";
 import { useRef } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 const IMAGE_FADE_DURATION = 400;
@@ -17,18 +18,19 @@ export default function SagraHero({ source }: { source?: string | null }) {
     const overlayStyle = useAnimatedStyle(() => ({ opacity: overlayOpacity.value }))
 
     return (
-        <View>
+        <View style={{ height: DETAIL_IMAGE_HEIGHT }}>
+            {/* Livello di base: se la foto manca o non è ancora arrivata, resta visibile */}
+            <ImagePlaceholder />
             <Image
                 source={source}
-                style={{ width: "100%", height: DETAIL_IMAGE_HEIGHT }}
+                style={StyleSheet.absoluteFill}
                 contentFit="cover"
                 transition={hasInitialSource ? 0 : IMAGE_FADE_DURATION}
                 onLoad={() => { overlayOpacity.value = withTiming(1, { duration: IMAGE_FADE_DURATION }) }}
             />
             <Animated.View
                 pointerEvents="none"
-                className="absolute top-0 left-0 right-0"
-                style={[{ height: DETAIL_IMAGE_HEIGHT, backgroundColor: "rgba(0,0,0,0.35)" }, overlayStyle]}
+                style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(0,0,0,0.35)" }, overlayStyle]}
             />
         </View>
     )

@@ -1,4 +1,3 @@
-import ImagePlaceholder from "@/components/index/image-placeholder";
 import BackButton from "@/components/sagra/back-button";
 import SagraHero from "@/components/sagra/sagra-hero";
 import SagraInfo from "@/components/sagra/sagra-info";
@@ -23,8 +22,7 @@ export default function SagraPage() {
 
     return (
         <View style={{ flex: 1 }}>
-            {(!data?.locandina && locandina) && <ImagePlaceholder />}
-            {data?.locandina || locandina && <SagraHero source={data?.locandina ?? locandina} />}
+            <SagraHero source={data?.locandina ?? locandina} />
             <BackButton />
             <ThemedView className="rounded-3xl -mt-8 flex-1 px-5 py-6">
                 {isPending ? 
