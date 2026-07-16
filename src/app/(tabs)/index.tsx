@@ -19,7 +19,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 export default function HomeScreen() {
-  const { location, permission, requestLocation } = useUserLocation()
+  const { location, locationError, permission, requestLocation } = useUserLocation()
   const [listType, setListType] = useState<"list" | "map">("list")
   const [filterText, setFilterText] = useState("")
   const [filterDistance, setFilterDistance] = useState(-1)
@@ -56,7 +56,7 @@ export default function HomeScreen() {
       <SafeAreaView edges={['top']} className="flex-1">
         <KeyboardAwareScrollView mode="layout" className='grow-0 overflow-visible'>
 
-          <IndexHeader location={location} permission={permission} requestLocation={requestLocation} />
+          <IndexHeader location={location} locationError={locationError} permission={permission} requestLocation={requestLocation} />
           <View className="mt-5">
             <FilterTextInput value={filterText} onChangeText={setFilterText} />
             {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
