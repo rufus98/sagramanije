@@ -52,7 +52,9 @@ src/
   components/        UI, raggruppata per schermata (index/, sagra/, info/, ui/)
   services/          chiamate all'API (sagra.service.ts)
   types/             schema Zod della Sagra + normalizzazione dei dati
-  hooks/             posizione utente, onboarding, debounce
+  hooks/             posizione utente, onboarding, tema, debounce
+  context/           contesto per la shared element transition lista → dettaglio
+  utils/             helper per la mappa + storage del flag di onboarding
   constants/theme.ts colori, spacing, font
 ```
 
