@@ -21,18 +21,15 @@ export default function useUserLocation() {
         try {
             setLocationError(false);
 
-            // se l'utente ha spento i servizi di localizzazione (GPS di sistema)
-            // getCurrentPositionAsync fallirebbe: meglio accorgersene subito e
-            // mostrare un errore invece di restare su "Recupero posizione…"
-            if (!(await hasServicesEnabledAsync())) {
-                setLocationError(true);
-                return;
-            }
-
             // su Android getCurrentPositionAsync può restare appeso a lungo
             // (emulatore senza posizione, GPS lento): proviamo prima l'ultima
-            // posizione nota, che ritorna subito se disponibile
-            let pos = await getLastKnownPositionAsync();
+            // posizione nota, che ritorna subito se disponibile. Se però i
+            // servizi di localizzazione sono spenti la saltiamo (sarebbe
+            // stantia) e lasciamo che getCurrentPositionAsync mostri il dialog
+            // Android per riattivarli (mayShowUserSettingsDialog, default true);
+            // se l'utente rifiuta lancia e finiamo nel catch
+            const servicesOn = await hasServicesEnabledAsync();
+            let pos = servicesOn ? await getLastKnownPositionAsync() : null;
             if (!pos) {
                 pos = await getCurrentPositionAsync({ accuracy: Accuracy.Balanced });
             }
