@@ -24,13 +24,13 @@ export default function SagraPage() {
         <View style={{ flex: 1 }}>
             <SagraHero source={data?.locandina ?? locandina} />
             <BackButton />
-            <ThemedView className="rounded-3xl -mt-8 flex-1 px-5 py-6">
-                {isPending ? 
+            <ThemedView className="rounded-3xl -mt-8 flex-1 py-6">
+                {isPending ?
                     <View className="flex-1 items-center justify-center">
                         <ActivityIndicator color={Colors.primary} />
                     </View>
                 :
-                    <ScrollView>
+                    <ScrollView contentContainerClassName="px-5">
                         <SagraInfo sagra={data} distanza={distanza ? Number(distanza) : undefined} />
                     </ScrollView>
                 }

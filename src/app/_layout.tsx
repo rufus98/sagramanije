@@ -35,6 +35,7 @@ export default function RootLayout() {
               <Stack.Protected guard={hasSeenOnboarding}>
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
+                <Stack.Screen name="sagra/[id]/attivita" options={{ animation: "fade" }} />
               </Stack.Protected>
               <Stack.Protected guard={!hasSeenOnboarding}>
                 <Stack.Screen name="onboarding" />

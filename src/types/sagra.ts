@@ -5,16 +5,6 @@ const MESI: Record<string, number> = {
     luglio: 6, agosto: 7, settembre: 8, ottobre: 9, novembre: 10, dicembre: 11,
 };
 
-// FNV-1a: hash deterministico, sincrono, ~5 righe
-function hashId(input: string): string {
-    let h = 0x811c9dc5;
-    for (let i = 0; i < input.length; i++) {
-        h ^= input.charCodeAt(i);
-        h = Math.imul(h, 0x01000193);
-    }
-    return (h >>> 0).toString(16).padStart(8, "0");
-}
-
 // Il dataset ha date in formati misti: ISO ("2026-07-08"),
 // testo italiano ("24 Aprile 2026") e alcuni null.
 // Ritorna sempre mezzanotte locale, così il giorno non slitta di fuso.
