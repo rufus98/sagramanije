@@ -28,11 +28,7 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
                     {sagra && <DateFormatter sagra={sagra} />}
                 </View>
             </View>
-            {sagra?.descrizione && <View className="mt-5">
-                <ThemedText className="font-title">La sagra</ThemedText>
-                <ThemedText className="mt-3" type="default" themeColor="textSecondary">{sagra?.descrizione}</ThemedText>
-            </View>}
-            {sagra && <TouchableOpacity onPress={() => router.push(`/sagra/${sagra.id}/attivita`)} className="bg-white rounded-3xl flex flex-row items-center justify-between px-3 py-5 mt-5 shadow-lg shadow-black/25">
+            {sagra && <TouchableOpacity onPress={() => router.push({ pathname: `/sagra/[id]/attivita`, params: { id: sagra.id, nome: sagra.nome_sagra } })} className="bg-white rounded-3xl flex flex-row items-center justify-between px-3 py-5 mt-5 shadow-lg shadow-black/25">
                 <View className="flex flex-row gap-3 items-center">
                     <View className="p-3 bg-primary/20 rounded-xl">
                         <Calendar color={Colors.primary} />
@@ -41,8 +37,12 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
                 </View>
                 <ChevronRight color={Colors.textSecondary} />
             </TouchableOpacity>}
+            {sagra?.descrizione && <View className="mt-5">
+                <ThemedText className="font-title">La sagra</ThemedText>
+                <ThemedText className="mt-3" type="default" themeColor="textSecondary">{sagra?.descrizione}</ThemedText>
+            </View>}
             {sagra && (
-                <View className="mt-5">
+                <View className="my-5">
                     <ThemedText className="font-title mb-3">Dove</ThemedText>
                     <SagraMap sagra={sagra} />
                 </View>

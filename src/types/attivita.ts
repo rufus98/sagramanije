@@ -10,3 +10,10 @@ export const Attivita = z.object({
 })
 
 export type Attivita = z.infer<typeof Attivita>
+
+export const GiornoAttivita = z.object({
+    giorno: z.date(),
+    attivita: z.array(Attivita)
+})
+
+export type GiornoAttivita = z.infer<typeof GiornoAttivita>

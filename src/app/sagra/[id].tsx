@@ -24,7 +24,7 @@ export default function SagraPage() {
         <View style={{ flex: 1 }}>
             <SagraHero source={data?.locandina ?? locandina} />
             <BackButton />
-            <ThemedView className="rounded-3xl -mt-8 flex-1 py-6">
+            <ThemedView className="rounded-3xl -mt-8 flex-1 pt-3">
                 {isPending ?
                     <View className="flex-1 items-center justify-center">
                         <ActivityIndicator color={Colors.primary} />
