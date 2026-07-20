@@ -21,13 +21,10 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
             <ThemedText type="subtitle" className="mt-4">{sagra?.nome_sagra}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">{sagra?.citta}, {sagra?.provincia}</ThemedText>
 
-            <View className="flex flex-row justify-start gap-3 mt-5">
-                <View className="rounded-3xl bg-white p-4 flex">
-                    <Calendar color={Colors.primary} />
-                    <ThemedText type="small" className="mt-4">QUANDO</ThemedText>
-                    {sagra && <DateFormatter sagra={sagra} />}
-                </View>
-            </View>
+            {sagra && <View className="flex flex-row items-center gap-2 mt-3">
+                <Calendar color={Colors.primary} size={16} />
+                <DateFormatter sagra={sagra} />
+            </View>}
             {sagra && <TouchableOpacity onPress={() => router.push({ pathname: `/sagra/[id]/attivita`, params: { id: sagra.id, nome: sagra.nome_sagra } })} className="bg-white rounded-3xl flex flex-row items-center justify-between px-3 py-5 mt-5 shadow-lg shadow-black/25">
                 <View className="flex flex-row gap-3 items-center">
                     <View className="p-3 bg-primary/20 rounded-xl">
