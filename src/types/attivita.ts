@@ -2,7 +2,7 @@ import z from "zod";
 
 export const Attivita = z.object({
     id: z.number(),
-    giorno: z.date(),
+    giorno: z.coerce.date(),
     ora_inizio: z.string().nullable(),
     ora_fine: z.string().nullable(),
     titolo: z.string(),
@@ -11,9 +11,9 @@ export const Attivita = z.object({
 
 export type Attivita = z.infer<typeof Attivita>
 
-export const GiornoAttivita = z.object({
-    giorno: z.date(),
+export const GiornoAttivitaObj = z.object({
+    giorno: z.coerce.date(),
     attivita: z.array(Attivita)
 })
 
-export type GiornoAttivita = z.infer<typeof GiornoAttivita>
+export type GiornoAttivita = z.infer<typeof GiornoAttivitaObj>

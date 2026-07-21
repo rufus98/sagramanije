@@ -21,16 +21,15 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
             <ThemedText type="subtitle" className="mt-4">{sagra?.nome_sagra}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">{sagra?.citta}, {sagra?.provincia}</ThemedText>
 
-            {sagra && <View className="flex flex-row items-center gap-2 mt-3">
-                <Calendar color={Colors.primary} size={16} />
-                <DateFormatter sagra={sagra} />
-            </View>}
-            {sagra && <TouchableOpacity onPress={() => router.push({ pathname: `/sagra/[id]/attivita`, params: { id: sagra.id, nome: sagra.nome_sagra } })} className="bg-white rounded-3xl flex flex-row items-center justify-between px-3 py-5 mt-5 shadow-lg shadow-black/25">
+            {(sagra && sagra.ha_attivita === true) && <TouchableOpacity onPress={() => router.push({ pathname: `/sagra/[id]/attivita`, params: { id: sagra.id, nome: sagra.nome_sagra } })} className="bg-white rounded-3xl flex flex-row items-center justify-between px-3 py-5 mt-5 shadow-lg shadow-black/25">
                 <View className="flex flex-row gap-3 items-center">
                     <View className="p-3 bg-primary/20 rounded-xl">
                         <Calendar color={Colors.primary} />
                     </View>
-                    <ThemedText type="subtitle">Programma completo</ThemedText>
+                    <View>
+                        <DateFormatter sagra={sagra} />
+                        <ThemedText type="subtitle">Programma completo</ThemedText>
+                    </View>
                 </View>
                 <ChevronRight color={Colors.textSecondary} />
             </TouchableOpacity>}

@@ -67,7 +67,8 @@ export const Sagra = z.object({
     category: testo,
     descrizione: testo.nullable(),
     ora_inizio: z.string().nullable(),
-    distanza_km: z.number().nullable().nullish()
+    distanza_km: z.number().nullable().nullish(),
+    ha_attivita: z.boolean().nullable()
 })
 
 export type Sagra = z.infer<typeof Sagra>;
