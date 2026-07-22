@@ -19,11 +19,9 @@ const getAttivitaBySagraId = async (id: number): Promise<GiornoAttivita[]> => {
 
     const data = await response.json()
     const parsed = AttivitaGiorni.safeParse(data)
-    console.log(parsed)
     if(!parsed.success) {
         throw new Error(`Risposta attivita sagra non valida: ${parsed.error.message}`)
     }
-    console.log("parsato"+parsed)
     return parsed.data.giorni
 }
 
