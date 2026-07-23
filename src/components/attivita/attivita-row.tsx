@@ -3,7 +3,7 @@ import { Attivita } from "@/types/attivita";
 import { View } from "react-native";
 import { ThemedText } from "../themed-text";
 
-export default function AttivitaRow({ attivita }: { attivita: Attivita }) {
+export default function AttivitaRow({ attivita, showDescription }: { attivita: Attivita, showDescription: boolean }) {
     const { ora_inizio, ora_fine, titolo, descrizione } = attivita;
 
     return (
@@ -29,7 +29,7 @@ export default function AttivitaRow({ attivita }: { attivita: Attivita }) {
             {/* Card titolo + descrizione */}
             <View className="flex-1 rounded-2xl px-4 py-3">
                 <ThemedText type="smallBold">{titolo}</ThemedText>
-                {descrizione && (
+                {(descrizione && showDescription) && (
                     <ThemedText type="small" themeColor="textSecondary" className="mt-1">
                         {descrizione}
                     </ThemedText>

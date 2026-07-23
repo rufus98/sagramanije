@@ -7,7 +7,8 @@ import { Colors } from "@/constants/theme";
 import { attivitaService } from "@/services/attivita.service";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, ScrollView, Switch, View } from "react-native";
 
 export default function Attivita() {
     const { top, left } = useBackButtonOffset();
@@ -16,6 +17,7 @@ export default function Attivita() {
         queryKey: ['programma', id],
         queryFn: async () => await attivitaService.getAttivitaBySagraId(Number(id))
     })
+    const [showDescription, setShowDescription] = useState(true)
     return (
         <ThemedView className="flex-1">
             <BackButton backgroundColor="white" />
@@ -27,14 +29,26 @@ export default function Attivita() {
                 <ThemedText type="small" themeColor="textSecondary">{nome}</ThemedText>
             </View>
 
-            <View className="px-5 flex-1 mt-5 mb-20">
+            <View
+                className="flex-row items-center justify-between mx-5 mt-5 px-4 py-3 rounded-2xl bg-white"
+            >
+                <ThemedText type="smallBold">Mostra descrizioni</ThemedText>
+                <Switch
+                    trackColor={{ false: "#D1D1D6", true: Colors.primary }}
+                    thumbColor="#FFFFFF"
+                    ios_backgroundColor="#D1D1D6"
+                    value={showDescription}
+                    onValueChange={setShowDescription}
+                />
+            </View>
+            <View className="px-5 flex-1 mb-20">
                 {isError ?
                     <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />
                     :
                     (isPending ? 
                         <ActivityIndicator color={Colors.primary} />
                         :
-                        <AttivitaList attivita={data} />
+                        <AttivitaList attivita={data} showDescription={showDescription} />
                     )
                 }
             </View>
