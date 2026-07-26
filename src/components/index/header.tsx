@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/theme";
-import { ChevronRight, MapPin } from "lucide-react-native";
-import { TouchableOpacity, View } from "react-native";
+import { ChevronRight, Info, MapPin } from "lucide-react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../themed-text";
 import { Coords } from "@/hooks/use-user-location";
 import { LocationPermissionResponse } from "expo-location";
@@ -56,6 +56,21 @@ export default function IndexHeader({permission, location, locationError, reques
                     </View>
             }
             <ThemedText type="title">Trova la tua sagra</ThemedText>
+            <TouchableOpacity
+                onPress={() => Alert.alert(
+                    "Informazioni in continuo aggiornamento",
+                    "Per alcune sagre, date, informazioni e locandine ufficiali non sono ancora state pubblicate. Prima di partire, verifica sempre l'anno e le date mostrate."
+                )}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Informazioni su date e locandine"
+                className="flex-row items-center self-start gap-1.5"
+            >
+                <Info color={Colors.textSecondary} size={15} />
+                <ThemedText type="small" themeColor="textSecondary">
+                    Date e locandine in aggiornamento
+                </ThemedText>
+            </TouchableOpacity>
         </View>
     )
 }
