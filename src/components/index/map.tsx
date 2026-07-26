@@ -9,6 +9,7 @@ import { ThemedText } from "../themed-text";
 import { Navigation, X } from "lucide-react-native";
 import { Colors } from "@/constants/theme";
 import { mapUtils } from "@/utils/map-utils";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // asset del pin generato (colore primario)
 const pinIcon = require("@/assets/map/pin.png");
@@ -36,11 +37,14 @@ function placeOf(sagra: Sagra) {
 }
 
 export default function MapLibre({ location, data }: { location: Coords, data: Sagra[] }) {
+    const insets = useSafeAreaInsets();
     const cameraRef = useRef<MapLib.CameraRef>(null);
     const sourceRef = useRef<MapLib.GeoJSONSourceRef>(null);
     const [selected, setSelected] = useState<Sagra | null>(null);
     // lista scrollabile mostrata al tap su un cluster
     const [clusterList, setClusterList] = useState<Sagra[] | null>(null);
+    // Su iOS le Native Tabs si sovrappongono ai contenuti non scrollabili.
+    const overlayBottom = Platform.OS === "ios" ? insets.bottom + 16 : 16;
 
     // tutte le sagre in un unico layer nativo (niente più una View per marker):
     // l'indice nelle properties permette di risalire alla Sagra originale
@@ -178,7 +182,10 @@ export default function MapLibre({ location, data }: { location: Coords, data: S
 
             {/* lista scrollabile delle sagre di un cluster */}
             {clusterList && (
-                <View className="absolute bottom-4 left-4 right-4 max-h-[55%] rounded-2xl bg-white shadow-lg">
+                <View
+                    className="absolute left-4 right-4 max-h-[55%] rounded-2xl bg-white shadow-lg"
+                    style={{ bottom: overlayBottom }}
+                >
                     <View className="flex-row items-center justify-between border-b border-gray-100 px-4 py-3">
                         <ThemedText type="smallBold">
                             {clusterList.length} sagre in zona
@@ -210,7 +217,10 @@ export default function MapLibre({ location, data }: { location: Coords, data: S
 
             {/* card info al tap sul pin singolo */}
             {selected && (
-                <View className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white p-4 shadow-lg">
+                <View
+                    className="absolute left-4 right-4 rounded-2xl bg-white p-4 shadow-lg"
+                    style={{ bottom: overlayBottom }}
+                >
                     <Pressable
                         onPress={() => setSelected(null)}
                         className="absolute right-3 top-3 z-10"
