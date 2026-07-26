@@ -57,12 +57,12 @@ export default function HomeScreen() {
         <KeyboardAwareScrollView mode="layout" className='grow-0 overflow-visible'>
 
           <IndexHeader location={location} locationError={locationError} permission={permission} requestLocation={requestLocation} />
-          <View className="mt-5">
+          <View className="mt-3">
             <FilterTextInput value={filterText} onChangeText={setFilterText} />
             {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
           </View>
           {/* heading della flatlist */}
-          <View className="flex flex-row justify-between my-8 items-center">
+          <View className="flex flex-row justify-between mt-3 mb-8 items-center">
             <View className="flex flex-row gap-1">
               <ThemedText type="smallBold" themeColor="primary">{memoizedSagre?.length ?? 0}</ThemedText>
               <ThemedText type="smallBold">sagre vicine</ThemedText>
