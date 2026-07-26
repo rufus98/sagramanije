@@ -1,14 +1,21 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { Colors } from '@/constants/theme';
+import { Platform } from 'react-native';
 
 export default function AppTabs() {
+
+  const selectedIconColor = Platform.OS === 'android' ? '#fff' : Colors.primary;
+  
   return (
     <NativeTabs
       backgroundColor={Colors.background}
       indicatorColor={Colors.primary}
-      tintColor={"#fff"}
-      labelStyle={{ selected: { color: Colors.text } }}>
+      iconColor={{
+        default: Colors.textSecondary,
+        selected: selectedIconColor,
+      }}
+      labelStyle={{ selected: { color: Colors.primary }, default: {color: Colors.textSecondary} }}>
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Sagre</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
