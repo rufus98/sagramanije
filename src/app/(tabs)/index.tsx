@@ -62,7 +62,7 @@ export default function HomeScreen() {
             {location && <DistanceFilter value={filterDistance} setValue={setFilterDistance} />}
           </View>
           {/* heading della flatlist */}
-          <View className="flex flex-row justify-between mt-3 mb-8 items-center">
+          <View className="flex flex-row justify-between mt-3 mb-3 items-center">
             <View className="flex flex-row gap-1">
               <ThemedText type="smallBold" themeColor="primary">{memoizedSagre?.length ?? 0}</ThemedText>
               <ThemedText type="smallBold">sagre vicine</ThemedText>

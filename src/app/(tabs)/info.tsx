@@ -15,7 +15,11 @@ export default function InfoScreen() {
   return (
     <ThemedView className="flex-1">
       <SafeAreaView edges={['top']} className="flex-1">
-        <ScrollView className="px-5 pt-3" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="px-5 pt-3"
+          contentInsetAdjustmentBehavior="automatic"
+          showsVerticalScrollIndicator={false}
+        >
           <ThemedText type="title">Chi siamo</ThemedText>
           <ThemedText className="mt-2" themeColor="textSecondary">
             <ThemedText className="font-bold">Sagramanije</ThemedText> nasce dalla voglia di riportare la
