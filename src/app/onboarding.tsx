@@ -71,12 +71,12 @@ const SLIDES: Slide[] = [
     icon: MapPin,
     color: '#30a46c',
     it: {
-      title: 'Attiva la posizione',
+      title: 'Continua',
       description:
         'Ci serve solo per calcolare quanto distano le sagre da te. Niente account, niente tracciamenti.',
     },
     ab: {
-      title: 'Appicce la posizione',
+      title: 'Daje',
       description:
         'C serv sole pe\' sapé quante stanne luntane le sagre da te. Nd serv l\'account, ndi traccem.',
     },
