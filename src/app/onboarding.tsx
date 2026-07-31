@@ -76,7 +76,7 @@ const SLIDES: Slide[] = [
         'Ci serve solo per calcolare quanto distano le sagre da te. Niente account, niente tracciamenti.',
     },
     ab: {
-      title: 'Daje',
+      title: 'Continua',
       description:
         'C serv sole pe\' sapé quante stanne luntane le sagre da te. Nd serv l\'account, ndi traccem.',
     },
