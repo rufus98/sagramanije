@@ -71,12 +71,12 @@ const SLIDES: Slide[] = [
     icon: MapPin,
     color: '#30a46c',
     it: {
-      title: 'Continua',
+      title: 'Attiva la posizione',
       description:
         'Ci serve solo per calcolare quanto distano le sagre da te. Niente account, niente tracciamenti.',
     },
     ab: {
-      title: 'Continua',
+      title: 'Appicce la posizione',
       description:
         'C serv sole pe\' sapé quante stanne luntane le sagre da te. Nd serv l\'account, ndi traccem.',
     },
@@ -84,8 +84,8 @@ const SLIDES: Slide[] = [
 ];
 
 const LABELS: Record<Lang, { skip: string; next: string; enable: string; later: string }> = {
-  it: { skip: 'Salta', next: 'Avanti', enable: 'Attiva posizione', later: 'Non ora' },
-  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Appicce la posizione', later: 'Mo\' no' },
+  it: { skip: 'Salta', next: 'Avanti', enable: 'Continua', later: 'Non ora' },
+  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Continua', later: 'Mo\' no' },
 };
 
 const LAST = SLIDES.length - 1;
