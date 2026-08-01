@@ -1,7 +1,7 @@
 {
   "name": "sagramanije",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.1.7",
   "dependencies": {
     "@expo-google-fonts/bricolage-grotesque": "^0.4.1",
     "@expo-google-fonts/plus-jakarta-sans": "^0.4.2",
@@ -50,8 +50,7 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "web": "expo start --web"
   },
   "private": true,
   "reanimated": {

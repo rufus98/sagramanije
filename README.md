@@ -1,56 +1,71 @@
-# Welcome to your Expo app 👋
+# Sagramanije 🎪
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App mobile per scoprire le sagre e le feste di paese in Abruzzo. Trova gli eventi più vicini a te, guardali su mappa e fatti portare lì con le indicazioni stradali.
 
-## Get started
+Costruita con [Expo](https://docs.expo.dev/versions/v57.0.0/) (SDK 57), React Native 0.86 ed expo-router.
 
-1. Install dependencies
+## Funzionalità
 
-   ```bash
-   npm install
-   ```
+- **Sagre vicine** — l'elenco è ordinato dalla più vicina, in base alla posizione dell'utente (permesso opzionale: senza posizione si vedono comunque tutte le sagre).
+- **Filtri** — ricerca per nome o città (con debounce) e filtro per raggio in km.
+- **Mappa** — MapLibre con clustering nativo dei pin; il tap su un cluster apre la lista delle sagre in zona, il tap su un pin apre la card con date e pulsante *Indicazioni* verso Google/Apple Maps.
+- **Dettaglio sagra** — locandina, descrizione, date, orari e link alla pagina ufficiale, con shared element transition dalla lista.
+- **Onboarding** — carosello al primo avvio, con flag persistito e versionato.
+- **Segnala una sagra** — modale nella schermata Info per contribuire con eventi mancanti.
 
-2. Start the app
+## Requisiti
 
-   ```bash
-   npx expo start
-   ```
+- Node.js 20+
+- Per le build native: Android Studio (Android) o Xcode (iOS)
+- Un file `.env` nella root con l'URL dell'API:
 
-In the output, you'll find options to open the app in a
+  ```
+  EXPO_PUBLIC_API_BASE_URL=https://<host-api>
+  ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+  L'app consuma due endpoint: `GET /sagre/vicine?lat=&leng=&raggio_km=` e `GET /sagre/:id`.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Come partire
 
 ```bash
-npm run reset-project
+npm install
+npm run dev        # avvia il dev server di Expo
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+L'app usa moduli nativi (MapLibre, expo-sqlite, expo-location) che **non** funzionano su Expo Go: serve una development build.
 
-### Other setup steps
+```bash
+npm run android    # expo run:android
+npm run ios        # expo run:ios
+npm run web        # expo start --web
+npm run lint       # expo lint
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Struttura del progetto
 
-## Learn more
+```
+src/
+  app/               rotte expo-router (typed routes attive)
+    (tabs)/          home (lista + mappa) e info
+    sagra/[id].tsx   dettaglio sagra
+    onboarding.tsx   carosello primo avvio
+  components/        UI, raggruppata per schermata (index/, sagra/, info/, ui/)
+  services/          chiamate all'API (sagra.service.ts)
+  types/             schema Zod della Sagra + normalizzazione dei dati
+  hooks/             posizione utente, onboarding, tema, debounce
+  context/           contesto per la shared element transition lista → dettaglio
+  utils/             helper per la mappa + storage del flag di onboarding
+  constants/theme.ts colori, spacing, font
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### Note tecniche
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Stile**: NativeWind (Tailwind) + `constants/theme.ts`. L'app è solo light mode.
+- **Dati**: React Query per fetch e cache; Zod valida ogni risposta.
+- **Normalizzazione**: il dataset a monte arriva da scraping HTML, quindi [types/sagra.ts](src/types/sagra.ts) decodifica le entità HTML (`&rsquo;`, `&#8217;`, …) e accetta date in formati misti (ISO e testo italiano tipo "24 Aprile 2026").
+- **Storage**: `expo-sqlite/kv-store` per il flag di onboarding (letto in modo sincrono al primo render).
+- **React Compiler** e le **typed routes** sono abilitati in [app.json](app.json).
 
-## Join the community
+## Build di release (Android)
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Le credenziali di firma sono lette da `android/gradle.properties` (`SAGRA_UPLOAD_STORE_FILE`, `SAGRA_UPLOAD_KEY_ALIAS`, …). Il path del keystore è locale alla macchina: va aggiornato prima di buildare su un'altra postazione.

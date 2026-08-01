@@ -5,16 +5,6 @@ const MESI: Record<string, number> = {
     luglio: 6, agosto: 7, settembre: 8, ottobre: 9, novembre: 10, dicembre: 11,
 };
 
-// FNV-1a: hash deterministico, sincrono, ~5 righe
-function hashId(input: string): string {
-    let h = 0x811c9dc5;
-    for (let i = 0; i < input.length; i++) {
-        h ^= input.charCodeAt(i);
-        h = Math.imul(h, 0x01000193);
-    }
-    return (h >>> 0).toString(16).padStart(8, "0");
-}
-
 // Il dataset ha date in formati misti: ISO ("2026-07-08"),
 // testo italiano ("24 Aprile 2026") e alcuni null.
 // Ritorna sempre mezzanotte locale, così il giorno non slitta di fuso.
@@ -40,21 +30,45 @@ function parseData(value: unknown): Date | null {
 
 const dataSchema = z.preprocess(parseData, z.date().nullable());
 
+// Il dataset arriva da HTML: i testi contengono entità (&rsquo;, &amp;, &#8217;).
+const ENTITA: Record<string, string> = {
+    rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“",
+    amp: "&", quot: '"', apos: "'", lt: "<", gt: ">",
+    nbsp: " ", hellip: "…", ndash: "–", mdash: "—",
+    agrave: "à", egrave: "è", eacute: "é", igrave: "ì", ograve: "ò", ugrave: "ù",
+};
+
+// Il ";" è opzionale: alcuni valori sono troncati (es. "Sant&rsquo").
+function decodeEntita(s: string): string {
+    return s.replace(/&(#x?[0-9a-f]+|[a-z]+);?/gi, (match, corpo: string) => {
+        if (corpo[0] === "#") {
+            const code = corpo[1].toLowerCase() === "x"
+                ? parseInt(corpo.slice(2), 16)
+                : parseInt(corpo.slice(1), 10);
+            return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+        }
+        return ENTITA[corpo.toLowerCase()] ?? match;
+    });
+}
+
+const testo = z.string().transform(decodeEntita);
+
 export const Sagra = z.object({
     id: z.number(),
-    nome_sagra: z.string(),
+    nome_sagra: testo,
     data_inizio: dataSchema,
     data_fine: dataSchema,
-    citta: z.string().nullable(),
-    provincia: z.string().nullable(),
+    citta: testo.nullable(),
+    provincia: testo.nullable(),
     lat: z.number(),
     leng: z.number(),
     locandina: z.url().nullable(),
     link_pagina_ufficiale: z.url().nullable(),
-    category: z.string(),
-    descrizione: z.string().nullable(),
+    category: testo,
+    descrizione: testo.nullable(),
     ora_inizio: z.string().nullable(),
-    distanza_km: z.number().nullable().nullish()
+    distanza_km: z.number().nullable().nullish(),
+    ha_attivita: z.boolean().nullable()
 })
 
 export type Sagra = z.infer<typeof Sagra>;

@@ -84,8 +84,8 @@ const SLIDES: Slide[] = [
 ];
 
 const LABELS: Record<Lang, { skip: string; next: string; enable: string; later: string }> = {
-  it: { skip: 'Salta', next: 'Avanti', enable: 'Attiva posizione', later: 'Non ora' },
-  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Appicce la posizione', later: 'Mo\' no' },
+  it: { skip: 'Salta', next: 'Avanti', enable: 'Continua', later: 'Non ora' },
+  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Vabbon', later: 'Mo\' no' },
 };
 
 const LAST = SLIDES.length - 1;

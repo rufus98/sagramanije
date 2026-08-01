@@ -1,21 +1,12 @@
 import { useState } from 'react';
 import { X } from 'lucide-react-native';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Linking,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  TextInput,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, Linking, Modal, Pressable, TextInput, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 
 type ReportSagraModalProps = {
   visible: boolean;
@@ -57,6 +48,7 @@ function LabeledInput({ label, value, onChangeText, placeholder, multiline }: Fi
 // Tutti i campi sono opzionali.
 export function ReportSagraModal({ visible, onClose }: ReportSagraModalProps) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const [nome, setNome] = useState('');
   const [indirizzo, setIndirizzo] = useState('');
   const [descrizione, setDescrizione] = useState('');
@@ -105,66 +97,59 @@ export function ReportSagraModal({ visible, onClose }: ReportSagraModalProps) {
         <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
           <View className="flex-row items-center justify-between px-5 pt-2 pb-4">
             <ThemedText type="subtitle">Segnala una sagra</ThemedText>
-            <Pressable
-              onPress={handleClose}
-              hitSlop={12}
-              className="rounded-full bg-white p-2"
-            >
+            <Pressable onPress={handleClose} hitSlop={12} className="rounded-full bg-white p-2">
               <X color={theme.text} size={22} strokeWidth={2} />
             </Pressable>
           </View>
 
-          <KeyboardAvoidingView
+          <KeyboardAwareScrollView
             className="flex-1"
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            contentContainerClassName="px-5 pb-8"
+            keyboardShouldPersistTaps="handled"
+            bottomOffset={50}
+            showsVerticalScrollIndicator={false}
           >
-            <ScrollView
-              className="px-5"
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-            >
-              <ThemedText themeColor="textSecondary" className="mb-6">
-                Manca una sagra? Aiutaci a mapparla. Compila quello che sai, ci pensiamo noi al
-                resto. <ThemedText className="font-jakarta-bold">Tutti i campi sono opzionali.</ThemedText>
-              </ThemedText>
+            <ThemedText themeColor="textSecondary" className="mb-6">
+              Manca una sagra? Aiutaci a mapparla. Compila quello che sai, ci pensiamo noi al resto.{' '}
+              <ThemedText className="font-jakarta-bold">Tutti i campi sono opzionali.</ThemedText>
+            </ThemedText>
 
-              <View className="gap-5">
-                <LabeledInput
-                  label="Nome"
-                  value={nome}
-                  onChangeText={setNome}
-                  placeholder="Es. Sagra della porchetta"
-                />
-                <LabeledInput
-                  label="Indirizzo"
-                  value={indirizzo}
-                  onChangeText={setIndirizzo}
-                  placeholder="Es. Piazza del Popolo, Roma"
-                />
-                <LabeledInput
-                  label="Descrizione"
-                  value={descrizione}
-                  onChangeText={setDescrizione}
-                  placeholder="Racconta com'è, quando si tiene, cosa si mangia..."
-                  multiline
-                />
-              </View>
+            <View className="gap-5">
+              <LabeledInput
+                label="Nome"
+                value={nome}
+                onChangeText={setNome}
+                placeholder="Es. Sagra della porchetta"
+              />
+              <LabeledInput
+                label="Indirizzo"
+                value={indirizzo}
+                onChangeText={setIndirizzo}
+                placeholder="Es. Piazza del Popolo, Roma"
+              />
+              <LabeledInput
+                label="Descrizione"
+                value={descrizione}
+                onChangeText={setDescrizione}
+                placeholder="Racconta com'è, quando si tiene, cosa si mangia..."
+                multiline
+              />
+            </View>
+          </KeyboardAwareScrollView>
 
-              <View className="h-8" />
-            </ScrollView>
-          </KeyboardAvoidingView>
-
-          <View className="px-5 pt-3">
-            <Pressable
-              onPress={handleSubmit}
-              className="items-center rounded-3xl py-4 active:opacity-80"
-              style={{ backgroundColor: theme.primary }}
-            >
-              <ThemedText className="font-jakarta-bold text-lg" style={{ color: '#fff' }}>
-                Invia segnalazione
-              </ThemedText>
-            </Pressable>
-          </View>
+          <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
+            <View className="px-5 pt-3">
+              <Pressable
+                onPress={handleSubmit}
+                className="items-center rounded-3xl py-4 active:opacity-80"
+                style={{ backgroundColor: theme.primary }}
+              >
+                <ThemedText className="font-jakarta-bold text-lg" style={{ color: '#fff' }}>
+                  Invia segnalazione
+                </ThemedText>
+              </Pressable>
+            </View>
+          </KeyboardStickyView>
         </SafeAreaView>
       </ThemedView>
     </Modal>

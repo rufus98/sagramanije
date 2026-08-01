@@ -1,5 +1,6 @@
 import { Sagra } from "@/types/sagra";
 import { FlatList } from "react-native";
+import Animated, { FadeInRight, ReduceMotion } from "react-native-reanimated";
 import SagraCard from "./sagra-card";
 
 export default function SagreList({ data }: { data: Sagra[] }) {
@@ -13,7 +14,17 @@ export default function SagreList({ data }: { data: Sagra[] }) {
             contentInsetAdjustmentBehavior="automatic"
             contentContainerClassName="gap-8 pb-8"
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <SagraCard sagra={item} />}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({ item, index }) => (
+                <Animated.View
+                    entering={FadeInRight
+                        .duration(300)
+                        .delay(Math.min(index, 5) * 45)
+                        .reduceMotion(ReduceMotion.System)}
+                >
+                    <SagraCard sagra={item} />
+                </Animated.View>
+            )}
         />
     )
 }

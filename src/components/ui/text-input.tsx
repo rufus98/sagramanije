@@ -2,6 +2,7 @@ import { Search } from 'lucide-react-native';
 import { TextInput, View } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
+import { Colors } from '@/constants/theme';
 
 type FilterTextInputProps = {
     placeholder?: string;
@@ -10,7 +11,7 @@ type FilterTextInputProps = {
 };
 
 export function FilterTextInput({
-    placeholder = 'Cerca sagre, città o piatti...',
+    placeholder = 'Cerca sagre o città...',
     value,
     onChangeText,
 }: FilterTextInputProps) {
@@ -36,6 +37,7 @@ export function FilterTextInput({
                 style={{ color: theme.text }}
                 value={value}
                 onChangeText={onChangeText}
+                selectionColor={Colors.primary}
             />
         </View>
     );
