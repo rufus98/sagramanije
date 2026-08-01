@@ -1,7 +1,9 @@
 import { Colors } from "@/constants/theme"
 import Slider from "@react-native-community/slider"
+import { SlidersHorizontal, X } from "lucide-react-native"
 import { Dispatch, SetStateAction, useState } from "react"
-import { View } from "react-native"
+import { Modal, Pressable, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ThemedText } from "../themed-text"
 
 type DistanceFilterType = {
@@ -29,7 +31,7 @@ const Skewer = {
 // inclinazioni fisse per indice: i cubetti veri non sono mai allineati
 const tilt = (i: number) => ((i * 37) % 15) - 7
 
-export default function DistanceFilter({ value, setValue }: DistanceFilterType) {
+function DistanceSlider({ value, setValue }: DistanceFilterType) {
     const isUnlimited = value === -1
     const [trackWidth, setTrackWidth] = useState(0)
 
@@ -38,7 +40,7 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
     const travel = Math.max(trackWidth - THUMB_SIZE, 0)
 
     return (
-        <View className="mt-5">
+        <View>
             <View className="relative justify-center" onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)}>
                 <Slider
                     minimumValue={MIN_KM}
@@ -111,5 +113,89 @@ export default function DistanceFilter({ value, setValue }: DistanceFilterType) 
                 </ThemedText>
             </View>
         </View>
+    )
+}
+
+export default function DistanceFilter({ value, setValue }: DistanceFilterType) {
+    const insets = useSafeAreaInsets()
+    const [visible, setVisible] = useState(false)
+    const [draftValue, setDraftValue] = useState(value)
+
+    const open = () => {
+        setDraftValue(value)
+        setVisible(true)
+    }
+
+    const apply = () => {
+        setValue(draftValue)
+        setVisible(false)
+    }
+
+    return (
+        <>
+            <Pressable
+                onPress={open}
+                accessibilityRole="button"
+                accessibilityLabel="Filtra per distanza"
+                className={`flex-row items-center gap-2 rounded-2xl border px-4 py-3 active:opacity-75 ${
+                    value === -1 ? 'border-[#eadaca] bg-white' : 'border-primary bg-primary'
+                }`}
+            >
+                <SlidersHorizontal size={16} color={value === -1 ? Colors.textSecondary : '#fff'} />
+                <ThemedText
+                    type="smallBold"
+                    style={{ color: value === -1 ? Colors.textSecondary : '#fff' }}
+                >
+                    {value === -1 ? 'Distanza' : `Entro ${value} km`}
+                </ThemedText>
+            </Pressable>
+
+            <Modal
+                visible={visible}
+                transparent
+                animationType="fade"
+                statusBarTranslucent
+                onRequestClose={() => setVisible(false)}
+            >
+                <View className="flex-1 justify-end bg-black/35">
+                    <Pressable
+                        className="absolute inset-0"
+                        onPress={() => setVisible(false)}
+                        accessibilityLabel="Chiudi filtro distanza"
+                    />
+                    <View
+                        className="rounded-t-[32px] bg-[#fff7ee] px-5 pt-5"
+                        style={{ paddingBottom: Math.max(insets.bottom, 20) }}
+                    >
+                        <View className="mb-7 flex-row items-center justify-between">
+                            <View className="flex-1 pr-3">
+                                <ThemedText type="subtitle">Quanto vuoi spostarti?</ThemedText>
+                                <ThemedText type="small" themeColor="textSecondary" className="mt-1">
+                                    Scegli il raggio massimo dalla tua posizione.
+                                </ThemedText>
+                            </View>
+                            <Pressable
+                                onPress={() => setVisible(false)}
+                                hitSlop={12}
+                                className="rounded-full bg-white p-2 active:opacity-70"
+                            >
+                                <X size={20} color={Colors.text} />
+                            </Pressable>
+                        </View>
+
+                        <DistanceSlider value={draftValue} setValue={setDraftValue} />
+
+                        <Pressable
+                            onPress={apply}
+                            className="mt-7 items-center rounded-3xl bg-primary py-4 active:opacity-80"
+                        >
+                            <ThemedText type="smallBold" style={{ color: '#fff' }}>
+                                Mostra risultati
+                            </ThemedText>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+        </>
     )
 }

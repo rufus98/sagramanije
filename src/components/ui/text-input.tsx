@@ -11,7 +11,7 @@ type FilterTextInputProps = {
 };
 
 export function FilterTextInput({
-    placeholder = 'Cerca sagre, città o piatti...',
+    placeholder = 'Cerca sagre o città...',
     value,
     onChangeText,
 }: FilterTextInputProps) {
