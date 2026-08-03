@@ -3,6 +3,7 @@ import SagraHero from "@/components/sagra/sagra-hero";
 import SagraInfo from "@/components/sagra/sagra-info";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import ErrorState from "@/components/ui/error-state";
 import { Colors } from "@/constants/theme";
 import { sagraService } from "@/services/sagra.service";
 import { mapUtils } from "@/utils/map-utils";
@@ -15,9 +16,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function SagraPage() {
     const { id, locandina, distanza } = useLocalSearchParams<{ id: string; locandina?: string; distanza?: string }>()
     const insets = useSafeAreaInsets()
-    const { data, isPending } = useQuery({
+    const { data, isPending, isError, isFetching, refetch } = useQuery({
         queryKey: ["sagra", id],
-        queryFn: async () => await sagraService.getById(id),
+        queryFn: ({ signal }) => sagraService.getById(id, signal),
+        retry: false,
     })
 
     return (
@@ -25,7 +27,9 @@ export default function SagraPage() {
             <SagraHero source={data?.locandina ?? locandina} />
             <BackButton />
             <ThemedView className="rounded-3xl -mt-12 flex-1 pt-3">
-                {isPending ?
+                {isError ?
+                    <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />
+                : isPending ?
                     <View className="flex-1 items-center justify-center">
                         <ActivityIndicator color={Colors.primary} />
                     </View>

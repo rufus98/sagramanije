@@ -1,5 +1,6 @@
 import { Sagra } from "@/types/sagra"
 import * as z from "zod"
+import { apiFetch } from "./api"
 
 export function formatDistance(km: number) {
     if(km < 1) {
@@ -8,23 +9,21 @@ export function formatDistance(km: number) {
     return `${km.toFixed(2)} km`
 }
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
-
 const NearbyResponse = z.object({
     risultati: z.array(Sagra)
 })
 
 // L'endpoint ordina già i risultati dal più vicino.
-const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }): Promise<Sagra[]> => {
+const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }, signal?: AbortSignal): Promise<Sagra[]> => {
 
-    let url = `${API_BASE_URL}/sagre/vicine`
+    let path = "/sagre/vicine"
     
-    if(lat && lng) {
-        url+=`?lat=${lat}&leng=${lng}`
-        if(raggioKm !== -1) url+= `&raggio_km=${raggioKm}`
+    if(lat !== null && lng !== null) {
+        path+=`?lat=${lat}&leng=${lng}`
+        if(raggioKm !== -1) path+= `&raggio_km=${raggioKm}`
     }
 
-    const response = await fetch(url)
+    const response = await apiFetch(path, { signal })
 
     if (!response.ok) {
         throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
@@ -44,9 +43,8 @@ const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng:
 
 // TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.
 // Cerca la sagra nel dataset locale simulando una latenza di rete.
-const getById = async (id: string): Promise<Sagra> => {
-    let url = `${API_BASE_URL}/sagre/${id}`
-    const response = await fetch(url)
+const getById = async (id: string, signal?: AbortSignal): Promise<Sagra> => {
+    const response = await apiFetch(`/sagre/${id}`, { signal })
 
     if (!response.ok) {
         throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)

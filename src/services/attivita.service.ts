@@ -1,17 +1,14 @@
 import { PROGRAMMA_MOCK } from "@/constants/attivita-mock";
 import { GiornoAttivita, GiornoAttivitaObj } from "@/types/attivita";
 import z from "zod";
-
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
+import { apiFetch } from "./api";
 
 export const AttivitaGiorni = z.object({
     giorni: z.array(GiornoAttivitaObj)
 })
 
-const getAttivitaBySagraId = async (id: number): Promise<GiornoAttivita[]> => {
-    const url = `${API_BASE_URL}/sagre/${id}/attivita`
-
-    const response = await fetch(url)
+const getAttivitaBySagraId = async (id: number, signal?: AbortSignal): Promise<GiornoAttivita[]> => {
+    const response = await apiFetch(`/sagre/${id}/attivita`, { signal })
 
     if(!response.ok) {
         throw new Error(`Richiesta attivita sagra fallita: ${response.status}`)
