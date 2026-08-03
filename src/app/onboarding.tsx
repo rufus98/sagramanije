@@ -83,9 +83,9 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const LABELS: Record<Lang, { skip: string; next: string; enable: string; later: string }> = {
-  it: { skip: 'Salta', next: 'Avanti', enable: 'Continua', later: 'Non ora' },
-  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Vabbon', later: 'Mo\' no' },
+const LABELS: Record<Lang, { skip: string; next: string; enable: string }> = {
+  it: { skip: 'Salta', next: 'Avanti', enable: 'Continua' },
+  ab: { skip: 'Lasse perde', next: 'Avand', enable: 'Vabbon' },
 };
 
 const LAST = SLIDES.length - 1;
@@ -223,16 +223,6 @@ export default function OnboardingScreen() {
             </ThemedText>
           </Pressable>
 
-          {/* senza posizione l'app funziona lo stesso, solo senza distanze */}
-          <Pressable
-            onPress={completeOnboarding}
-            className="items-center py-3 active:opacity-60"
-            disabled={!isLast}
-            style={{ opacity: isLast ? 1 : 0 }}>
-            <ThemedText type="smallBold" themeColor="textSecondary">
-              {labels.later}
-            </ThemedText>
-          </Pressable>
         </View>
       </SafeAreaView>
     </ThemedView>
