@@ -8,7 +8,8 @@
     "scheme": "sagramanije",
     "userInterfaceStyle": "light",
     "ios": {
-      "bundleIdentifier": "it.sagramanije.app"
+      "bundleIdentifier": "it.sagramanije.app",
+      "associatedDomains": ["applinks:sagramanije.it"]
     },
     "android": {
       "backgroundColor": "#fff7ee",
@@ -23,7 +24,21 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "it.sagramanije.app"
+      "package": "it.sagramanije.app",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "sagramanije.it",
+              "pathPrefix": "/sagra"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "output": "static",
