@@ -4,12 +4,13 @@ import { Fonts, ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
+  type?: 'default' | 'defaultSemiBold' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
   themeColor?: ThemeColor;
 };
 
 const typeClasses = {
   default: 'text-xl leading-7 font-jakarta-medium',
+  defaultSemiBold: 'text-xl leading-7 font-jakarta-bold',
   title: 'text-4xl leading-[52px] font-title',
   small: 'text-sm font-jakarta-medium',
   smallBold: 'text-sm font-jakarta-bold',
