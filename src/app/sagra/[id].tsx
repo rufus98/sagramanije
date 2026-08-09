@@ -1,6 +1,7 @@
 import BackButton from "@/components/sagra/back-button";
 import SagraHero from "@/components/sagra/sagra-hero";
 import SagraInfo from "@/components/sagra/sagra-info";
+import ShareButton from "@/components/sagra/share-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ErrorState from "@/components/ui/error-state";
@@ -40,20 +41,13 @@ export default function SagraPage() {
                 }
             </ThemedView>
 
-            {(data && data.lat) && <View className="bg-white px-3 pt-4 mb-2" style={{paddingBottom: insets.bottom}}>
-                <TouchableOpacity onPress={() => mapUtils.openDirections(data)} className="w-2/3 m-auto py-5 bg-primary rounded-3xl flex flex-row gap-3 items-center justify-center"
-                    style={{
-                        shadowColor: Colors.primary,
-                        shadowOffset: { width: 0, height: 3 },
-                        shadowOpacity: 0.12,
-                        shadowRadius: 20,
-                        elevation: 5,
-                    }}
-                >
+            {(data && data.lat) && <ThemedView className="px-4 pt-4 flex flex-row gap-3" style={{paddingBottom: Math.max(insets.bottom, 16)}}>
+                <ShareButton sagra={data} />
+                <TouchableOpacity onPress={() => mapUtils.openDirections(data)} className="flex-1 py-4 bg-primary rounded-3xl flex flex-row gap-3 items-center justify-center shadow-xl shadow-primary/20">
                     <MapPin color={"#fff"} />
                     <ThemedText type="default" className="font-bold font-title" style={{color: "#fff"}}>Come arrivare</ThemedText>
                 </TouchableOpacity>
-            </View>}
+            </ThemedView>}
         </View>
     )
 }
