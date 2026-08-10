@@ -1,4 +1,4 @@
-import { Share as ShareIcon } from "lucide-react-native";
+import { Share2, Share as ShareIcon } from "lucide-react-native";
 import { TouchableOpacity, Share } from "react-native";
 import type { Sagra } from "@/types/sagra";
 
@@ -27,7 +27,7 @@ export default function ShareButton({ sagra }: ShareButtonProps) {
 
     return (
         <TouchableOpacity onPress={handleShare} className="bg-white p-5 rounded-3xl shadow-xl shadow-black/10">
-            <ShareIcon />
+            <Share2 />
         </TouchableOpacity>
     )
 }
