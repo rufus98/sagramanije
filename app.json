@@ -9,7 +9,11 @@
     "userInterfaceStyle": "light",
     "ios": {
       "bundleIdentifier": "it.sagramanije.app",
-      "associatedDomains": ["applinks:sagramanije.it"]
+      "associatedDomains": ["applinks:sagramanije.it"],
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "it",
+        "CFBundleLocalizations": ["it"]
+      }
     },
     "android": {
       "backgroundColor": "#fff7ee",
