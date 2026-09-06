@@ -1,10 +1,13 @@
 import { Image } from 'expo-image';
 import { X } from 'lucide-react-native';
 import { useEffect } from 'react';
-import { Modal, Platform, Pressable, StatusBar, StyleSheet, useWindowDimensions } from 'react-native';
+import { Modal, Platform, Pressable, StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { cssInterop } from 'nativewind';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+cssInterop(GestureHandlerRootView, { className: 'style' });
 
 const MAX_SCALE = 4;
 const DOUBLE_TAP_SCALE = 2.5;
@@ -149,48 +152,52 @@ export default function PosterViewer({ source, visible, onClose }: PosterViewerP
       visible={visible}
       animationType="fade"
       presentationStyle="fullScreen"
+      statusBarTranslucent
       onRequestClose={handleClose}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#080808" />
-      <GestureHandlerRootView className="flex-1 bg-[#080808]">
-        <GestureDetector gesture={imageGesture}>
-          <Animated.View style={[StyleSheet.absoluteFill, imageStyle]}>
-            <Image
-              source={{ uri: source }}
-              style={StyleSheet.absoluteFill}
-              contentFit="contain"
-              transition={150}
-              cachePolicy="memory-disk"
-              onLoad={({ source: image }) => {
-                const imageRatio = image.width / image.height;
-                const screenRatio = screenWidth / screenHeight;
+      <StatusBar barStyle="light-content" backgroundColor="#080808" translucent />
+      <View className="flex-1 bg-[#080808]">
+        <GestureHandlerRootView className="flex-1 bg-[#080808]">
+          <GestureDetector gesture={imageGesture}>
+            <Animated.View style={[StyleSheet.absoluteFill, imageStyle]}>
+              <Image
+                source={{ uri: source }}
+                style={StyleSheet.absoluteFill}
+                contentFit="contain"
+                transition={150}
+                cachePolicy="memory-disk"
+                onLoad={({ source: image }) => {
+                  const imageRatio = image.width / image.height;
+                  const screenRatio = screenWidth / screenHeight;
 
-                if (imageRatio > screenRatio) {
-                  fittedImageWidth.value = screenWidth;
-                  fittedImageHeight.value = screenWidth / imageRatio;
-                } else {
-                  fittedImageWidth.value = screenHeight * imageRatio;
-                  fittedImageHeight.value = screenHeight;
-                }
-              }}
-              accessible
-              accessibilityLabel="Locandina della sagra a schermo intero"
-              accessibilityHint="Pizzica o tocca due volte per ingrandire, trascina per spostare"
-            />
-          </Animated.View>
-        </GestureDetector>
+                  if (imageRatio > screenRatio) {
+                    fittedImageWidth.value = screenWidth;
+                    fittedImageHeight.value = screenWidth / imageRatio;
+                  } else {
+                    fittedImageWidth.value = screenHeight * imageRatio;
+                    fittedImageHeight.value = screenHeight;
+                  }
+                }}
+                accessible
+                accessibilityLabel="Locandina della sagra a schermo intero"
+                accessibilityHint="Pizzica o tocca due volte per ingrandire, trascina per spostare"
+              />
+            </Animated.View>
+          </GestureDetector>
 
-        <Pressable
-          onPress={handleClose}
-          accessibilityRole="button"
-          accessibilityLabel="Chiudi locandina"
-          hitSlop={8}
-          className="absolute right-5 rounded-full bg-white/15 p-3 active:opacity-70"
-          style={{ top: closeButtonTop }}
-        >
-          <X color="#fff" size={24} />
-        </Pressable>
-      </GestureHandlerRootView>
+          <Pressable
+            onPress={handleClose}
+            accessibilityRole="button"
+            accessibilityLabel="Chiudi locandina"
+            hitSlop={8}
+            className="absolute right-5 z-10 rounded-full bg-black/65 border border-white/20 p-3 active:opacity-70"
+            style={{ top: closeButtonTop }}
+          >
+            <X color="#fff" size={24} />
+          </Pressable>
+        </GestureHandlerRootView>
+      </View>
     </Modal>
   );
 }
+
