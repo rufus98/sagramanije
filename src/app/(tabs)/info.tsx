@@ -48,15 +48,22 @@ export default function InfoScreen() {
             />
           </View>
 
-          <ThemedText type="subtitle" className="mt-8 mb-4">
-            Contatti
+          <ThemedText type="subtitle" className="mt-8">
+            Assistenza
+          </ThemedText>
+          <ThemedText className="mt-2 mb-4" themeColor="textSecondary">
+            Per domande, problemi tecnici o suggerimenti sull'app, contatta il nostro supporto.
           </ThemedText>
           <ContactCard>
             <ContactRow
               icon={Mail}
-              label="Email"
+              label="Email assistenza"
               value="sagramanije@gmail.com"
-              onPress={() => Linking.openURL('mailto:sagramanije@gmail.com')}
+              onPress={() =>
+                Linking.openURL(
+                  `mailto:sagramanije@gmail.com?subject=${encodeURIComponent('Assistenza Sagramanije')}`
+                )
+              }
             />
           </ContactCard>
 

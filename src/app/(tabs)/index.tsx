@@ -33,7 +33,8 @@ export default function HomeScreen() {
 
   const { data, isPending, isError, isFetching, refetch } = useQuery({
     queryKey: ['sagre', location?.lat, location?.lng, debouncedFilterDistance],
-    queryFn: () => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null, raggioKm: debouncedFilterDistance })
+    queryFn: ({ signal }) => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null, raggioKm: debouncedFilterDistance }, signal),
+    retry: false,
   })
 
 

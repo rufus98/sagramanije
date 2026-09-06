@@ -19,9 +19,18 @@ export default function BackButton({ backgroundColor = Colors.background }: { ba
     const router = useRouter()
     const { top, left } = useBackButtonOffset();
 
+    const handleBack = () => {
+        if (router.canGoBack()) {
+            router.back();
+            return;
+        }
+
+        router.replace("/");
+    };
+
     return (
         <TouchableOpacity
-            onPress={() => router.back()}
+            onPress={handleBack}
             className="absolute z-10 p-5 rounded-3xl"
             style={{ backgroundColor, top, left }}
         >

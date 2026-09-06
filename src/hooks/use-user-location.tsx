@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AppState, Linking } from "react-native";
+import { Alert, AppState, Linking } from "react-native";
 import { Accuracy, getCurrentPositionAsync, getLastKnownPositionAsync, hasServicesEnabledAsync, reverseGeocodeAsync, useForegroundPermissions } from 'expo-location';
 
 export type LocationInfo = {
@@ -37,7 +37,7 @@ async function getPosition(servicesOn: boolean, interactive: boolean) {
 }
 
 export default function useUserLocation() {
-    const [permission, requestPermission] = useForegroundPermissions();
+    const [permission, requestPermission, getPermission] = useForegroundPermissions();
     const [location, setLocation] = useState<Coords>(null);
     const [locationError, setLocationError] = useState(false);
     // evita fetch sovrapposte (es. AppState che cambia mentre una è in corso)
@@ -90,22 +90,32 @@ export default function useUserLocation() {
 
     // chiamare per richiedere la posizione
     const requestLocation = useCallback(async () => {
-        // non leggo `permission` in cache per decidere se mostrare il popup (può
-        // essere null al mount o stale dopo un "chiedi ogni volta" scaduto):
-        // requestPermission ritorna sempre lo stato aggiornato
-        const wasGranted = permission?.granted;
-        const { granted, canAskAgain } = await requestPermission();
+        // Leggo prima lo stato aggiornato senza mostrare alcun popup. Se iOS non
+        // può più fare la richiesta nativa, non apro mai Impostazioni da solo:
+        // l'utente deve scegliere esplicitamente l'azione dal nostro avviso.
+        const currentPermission = await getPermission();
 
-        if (granted) {
-            // se era già concesso l'effect non riscatta (granted non cambia):
-            // fetch io, interattiva così il dialog GPS può comparire. Se è
-            // appena stato concesso ci pensa l'effect, evito la doppia chiamata
-            if (wasGranted) fetchLocation(true);
-        } else if (!canAskAgain) {
-            // rifiuto permanente: unica via sono le impostazioni
-            Linking.openSettings();
+        if (currentPermission.granted) {
+            fetchLocation(true);
+            return;
         }
-    }, [permission?.granted, requestPermission, fetchLocation]);
+
+        if (!currentPermission.canAskAgain) {
+            Alert.alert(
+                "Posizione non disponibile",
+                "Sagramanije funziona anche senza posizione. Se vuoi vedere distanze e sagre vicine, puoi consentire l'accesso dalle Impostazioni.",
+                [
+                    { text: "Continua senza posizione", style: "cancel" },
+                    { text: "Apri Impostazioni", onPress: () => Linking.openSettings() },
+                ]
+            );
+            return;
+        }
+
+        // Prima richiesta: mostriamo il popup nativo e rispettiamo la risposta.
+        // In caso di rifiuto non mostriamo altri avvisi e non apriamo Impostazioni.
+        await requestPermission();
+    }, [getPermission, requestPermission, fetchLocation]);
 
     return { location, locationError, permission, requestLocation };
 }

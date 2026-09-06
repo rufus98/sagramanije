@@ -1,5 +1,6 @@
 import { Sagra } from "@/types/sagra"
 import * as z from "zod"
+import { apiFetch } from "./api"
 
 export function formatDistance(km: number) {
     if(km < 1) {
@@ -8,23 +9,21 @@ export function formatDistance(km: number) {
     return `${km.toFixed(2)} km`
 }
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
-
 const NearbyResponse = z.object({
     risultati: z.array(Sagra)
 })
 
 // L'endpoint ordina già i risultati dal più vicino.
-const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }): Promise<Sagra[]> => {
+const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }, signal?: AbortSignal): Promise<Sagra[]> => {
 
-    let url = `${API_BASE_URL}/sagre/vicine`
+    let path = "/sagre/vicine"
     
-    if(lat && lng) {
-        url+=`?lat=${lat}&leng=${lng}`
-        if(raggioKm !== -1) url+= `&raggio_km=${raggioKm}`
+    if(lat !== null && lng !== null) {
+        path+=`?lat=${lat}&leng=${lng}`
+        if(raggioKm !== -1) path+= `&raggio_km=${raggioKm}`
     }
 
-    const response = await fetch(url)
+    const response = await apiFetch(path, { signal })
 
     if (!response.ok) {
         throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
@@ -42,14 +41,52 @@ const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng:
     return parsed.data.risultati
 }
 
-// TODO: TEMPORANEO — rimuovere quando l'endpoint /sagre/:id è pronto.
-// Cerca la sagra nel dataset locale simulando una latenza di rete.
-const getById = async (id: string): Promise<Sagra> => {
-    let url = `${API_BASE_URL}/sagre/${id}`
-    const response = await fetch(url)
+const resolveSlugToId = async (slug: string, signal?: AbortSignal): Promise<number> => {
+    const siteUrl = (process.env.EXPO_PUBLIC_SITE_URL || "https://sagramanije.it").replace(/\/$/, "")
+
+    // 1. Prova prima con l'endpoint dedicato per singolo slug su sagramanije.it
+    try {
+        const response = await fetch(`${siteUrl}/api/sagra/${encodeURIComponent(slug)}`, { signal })
+        if (response.ok) {
+            const data = await response.json()
+            if (data?.id && typeof data.id === "number") {
+                return data.id
+            }
+        }
+    } catch {
+        // Fallback sotto
+    }
+
+    // 2. Fallback con l'archivio completo già presente su sagramanije.it
+    try {
+        const response = await fetch(`${siteUrl}/api/archivio`, { signal })
+        if (response.ok) {
+            const data = await response.json()
+            const found = data?.sagre?.find((s: { slug?: string; id?: number }) => s.slug === slug)
+            if (found?.id && typeof found.id === "number") {
+                return found.id
+            }
+        }
+    } catch (error) {
+        console.error("Errore durante la risoluzione dello slug:", error)
+    }
+
+    throw new Error(`Nessuna sagra trovata per lo slug "${slug}"`)
+}
+
+// Cerca la sagra per ID numerico o per slug (es. da deep link web: /sagra/slug-della-sagra).
+const getById = async (idOrSlug: string, signal?: AbortSignal): Promise<Sagra> => {
+    let id = idOrSlug
+
+    if (!/^\d+$/.test(idOrSlug)) {
+        const resolvedId = await resolveSlugToId(idOrSlug, signal)
+        id = String(resolvedId)
+    }
+
+    const response = await apiFetch(`/sagre/${id}`, { signal })
 
     if (!response.ok) {
-        throw new Error(`Richiesta sagre vicine fallita: ${response.status}`)
+        throw new Error(`Richiesta sagra fallita: ${response.status}`)
     }
     const sagra = Sagra.parse(await response.json())
 
@@ -59,5 +96,7 @@ const getById = async (id: string): Promise<Sagra> => {
 export const sagraService = {
     formatDistance,
     getNearbySagre,
-    getById
+    getById,
+    resolveSlugToId,
 }
+

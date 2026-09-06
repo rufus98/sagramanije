@@ -1,17 +1,20 @@
 import { PROGRAMMA_MOCK } from "@/constants/attivita-mock";
 import { GiornoAttivita, GiornoAttivitaObj } from "@/types/attivita";
 import z from "zod";
-
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
+import { apiFetch } from "./api";
+import { sagraService } from "./sagra.service";
 
 export const AttivitaGiorni = z.object({
     giorni: z.array(GiornoAttivitaObj)
 })
 
-const getAttivitaBySagraId = async (id: number): Promise<GiornoAttivita[]> => {
-    const url = `${API_BASE_URL}/sagre/${id}/attivita`
+const getAttivitaBySagraId = async (idOrSlug: number | string, signal?: AbortSignal): Promise<GiornoAttivita[]> => {
+    let id = idOrSlug
+    if (typeof idOrSlug === "string" && !/^\d+$/.test(idOrSlug)) {
+        id = await sagraService.resolveSlugToId(idOrSlug, signal)
+    }
 
-    const response = await fetch(url)
+    const response = await apiFetch(`/sagre/${id}/attivita`, { signal })
 
     if(!response.ok) {
         throw new Error(`Richiesta attivita sagra fallita: ${response.status}`)
