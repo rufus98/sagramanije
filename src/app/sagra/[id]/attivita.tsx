@@ -15,7 +15,7 @@ export default function Attivita() {
     const { id, nome } = useLocalSearchParams<{ id: string, nome: string }>()
     const { data, isPending, isError, refetch, isFetching } = useQuery({
         queryKey: ['programma', id],
-        queryFn: ({ signal }) => attivitaService.getAttivitaBySagraId(Number(id), signal),
+        queryFn: ({ signal }) => attivitaService.getAttivitaBySagraId(id, signal),
         retry: false,
     })
     const [showDescription, setShowDescription] = useState(true)

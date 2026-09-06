@@ -2,12 +2,18 @@ import { PROGRAMMA_MOCK } from "@/constants/attivita-mock";
 import { GiornoAttivita, GiornoAttivitaObj } from "@/types/attivita";
 import z from "zod";
 import { apiFetch } from "./api";
+import { sagraService } from "./sagra.service";
 
 export const AttivitaGiorni = z.object({
     giorni: z.array(GiornoAttivitaObj)
 })
 
-const getAttivitaBySagraId = async (id: number, signal?: AbortSignal): Promise<GiornoAttivita[]> => {
+const getAttivitaBySagraId = async (idOrSlug: number | string, signal?: AbortSignal): Promise<GiornoAttivita[]> => {
+    let id = idOrSlug
+    if (typeof idOrSlug === "string" && !/^\d+$/.test(idOrSlug)) {
+        id = await sagraService.resolveSlugToId(idOrSlug, signal)
+    }
+
     const response = await apiFetch(`/sagre/${id}/attivita`, { signal })
 
     if(!response.ok) {
