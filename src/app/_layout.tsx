@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as SystemUI from 'expo-system-ui';
 
+import { MarketSeasonProvider } from '@/context/market-season';
 import { SharedTransitionProvider } from '@/context/shared-transition';
 import { useHasSeenOnboarding } from '@/hooks/use-onboarding';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -29,20 +30,24 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
         <StatusBar barStyle={"dark-content"} />
-        <SharedTransitionProvider>
-          <View style={{ flex: 1 }} onLayout={() => SplashScreen.hideAsync()}>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Protected guard={hasSeenOnboarding}>
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
-                <Stack.Screen name="sagra/[id]/attivita" options={{ animation: "fade" }} />
-              </Stack.Protected>
-              <Stack.Protected guard={!hasSeenOnboarding}>
-                <Stack.Screen name="onboarding" />
-              </Stack.Protected>
-            </Stack>
-          </View>
-        </SharedTransitionProvider>
+        <MarketSeasonProvider>
+          <SharedTransitionProvider>
+            <View style={{ flex: 1 }} onLayout={() => SplashScreen.hideAsync()}>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Protected guard={hasSeenOnboarding}>
+                  <Stack.Screen name="index" />
+                  <Stack.Screen name="(tabs)" />
+                  <Stack.Screen name="mercatino/[id]" options={{ animation: "fade" }} />
+                  <Stack.Screen name="sagra/[id]" options={{ animation: "fade" }} />
+                  <Stack.Screen name="sagra/[id]/attivita" options={{ animation: "fade" }} />
+                </Stack.Protected>
+                <Stack.Protected guard={!hasSeenOnboarding}>
+                  <Stack.Screen name="onboarding" />
+                </Stack.Protected>
+              </Stack>
+            </View>
+          </SharedTransitionProvider>
+        </MarketSeasonProvider>
       </KeyboardProvider>
     </QueryClientProvider>
   );

@@ -23,7 +23,9 @@ Costruita con [Expo](https://docs.expo.dev/versions/v57.0.0/) (SDK 57), React Na
   EXPO_PUBLIC_API_BASE_URL=https://<host-api>
   ```
 
-  L'app consuma due endpoint: `GET /sagre/vicine?lat=&leng=&raggio_km=` e `GET /sagre/:id`.
+  Le liste usano `GET /sagre/vicine` (coordinate opzionali `lat` e `leng`, raggio opzionale `raggio_km`). Sagre e Mercatini condividono la risposta per la stessa posizione e lo stesso raggio. Il dettaglio usa `GET /sagre/:id`.
+  Il filtro è locale. Per classificare un mercatino usa `tipo: "mercatini"` quando il campo è disponibile, oppure `category: "Mercatini"`. In assenza di tipo viene riconosciuto anche un titolo che inizia con «Mercatino di Natale» o «Mercatini di Natale».
+  La tab è stagionale, dal 20 novembre al 20 gennaio (ora italiana). `npm run dev:mercatini` simula la data in sviluppo e usa la stessa API.
 
 ## Come partire
 

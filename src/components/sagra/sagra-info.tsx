@@ -4,11 +4,12 @@ import { View } from "react-native";
 import { ThemedText } from "../themed-text";
 import SagraMap from "./sagra-map";
 import SagraActionCards from "./sagra-action-cards";
+import { SagraLandscape } from "./festa-decorations";
 
 // Riga informativa in cima al contenuto: categoria e distanza.
 export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, distanza?: number }) {
     return (
-        <View className="pb-8">
+        <View>
             <View className="flex flex-row justify-between">
                 <ThemedText themeColor="primary" type="smallBold">{sagra?.category.toUpperCase()}</ThemedText>
                 {distanza && <ThemedText type="smallBold">{formatDistance(distanza)}</ThemedText>}
@@ -24,9 +25,10 @@ export default function SagraInfo({ sagra, distanza }: { sagra?: Sagra | null, d
             </View>}
 
             {sagra && (
-                <View className="my-5 mb-8">
+                <View className="mt-5">
                     <ThemedText className="font-title mb-3">Dove</ThemedText>
                     <SagraMap sagra={sagra} />
+                    <SagraLandscape />
                 </View>
             )}
         </View>

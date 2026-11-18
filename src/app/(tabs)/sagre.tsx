@@ -1,3 +1,7 @@
+import { useRouter } from 'expo-router';
+import { useMarketSeason } from '@/context/market-season';
+import { useNearbyEvents } from '@/hooks/use-nearby-events';
+import { isMarket } from '@/utils/mercatini';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import DistanceFilter from '@/components/index/distance-filter';
@@ -14,14 +18,14 @@ import { FilterTextInput } from '@/components/ui/text-input';
 import { Colors } from '@/constants/theme';
 import useDebounce from '@/hooks/use-debounce';
 import useUserLocation from '@/hooks/use-user-location';
-import { sagraService } from '@/services/sagra.service';
 import { DateFilter as DateFilterValue, matchesDateFilter } from '@/utils/sagra-filters';
-import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 export default function HomeScreen() {
+  const router = useRouter()
+  const { inSeason } = useMarketSeason()
   const { location, locationError, permission, requestLocation } = useUserLocation()
   const [listType, setListType] = useState<"list" | "map">("list")
   const [filterText, setFilterText] = useState("")
@@ -31,16 +35,13 @@ export default function HomeScreen() {
   const debouncedFilterDistance = useDebounce(filterDistance, 1000)
 
 
-  const { data, isPending, isError, isFetching, refetch } = useQuery({
-    queryKey: ['sagre', location?.lat, location?.lng, debouncedFilterDistance],
-    queryFn: ({ signal }) => sagraService.getNearbySagre({ lat: location ? location.lat : null, lng: location ? location.lng : null, raggioKm: debouncedFilterDistance }, signal),
-    retry: false,
-  })
+  const { data, isPending, isError, isFetching, refetch } = useNearbyEvents(location, debouncedFilterDistance)
 
 
   // Ricerca e periodo sono filtri locali: non richiedono una nuova chiamata API.
   const memoizedSagre = useMemo(() => {
     return data?.filter(x => {
+      if (isMarket(x)) return false
       const query = debouncedFilterText.trim().toLocaleLowerCase('it-IT')
       const searchableText = [x.nome_sagra, x.citta, x.provincia, x.category, x.descrizione]
         .filter(Boolean)
@@ -56,6 +57,10 @@ export default function HomeScreen() {
     setFilterDistance(-1)
     setDateFilter('all')
   }
+
+  const suggestMarkets = inSeason && memoizedSagre?.length === 0 && !filterText.trim()
+    && dateFilter === 'all' && filterDistance === -1 && debouncedFilterDistance === -1
+    && data?.some(isMarket)
 
   return (
     <ThemedView className='flex-1 pt-3 px-5'>
@@ -93,7 +98,7 @@ export default function HomeScreen() {
               <ActivityIndicator color={Colors.primary} />
             </View>
           ) : memoizedSagre?.length === 0 ? (
-            <SagreEmptyState onReset={resetFilters} />
+            <SagreEmptyState onReset={resetFilters} onShowMarkets={suggestMarkets ? () => router.navigate('/mercatini') : undefined} />
           ) : listType === "list" ? (
             <SagreList
               key={`${dateFilter}-${debouncedFilterText}-${debouncedFilterDistance}`}

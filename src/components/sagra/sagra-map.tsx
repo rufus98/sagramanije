@@ -1,7 +1,7 @@
 import * as MapLib from "@maplibre/maplibre-react-native";
 import type { StyleSpecification } from "@maplibre/maplibre-react-native";
 import styleMap from "@/assets/map/style.json";
-import { Sagra } from "@/types/sagra";
+import type { Sagra } from "@/types/sagra";
 import { useMemo } from "react";
 import { View } from "react-native";
 
@@ -12,7 +12,7 @@ const DETAIL_ZOOM = 14;
 
 // Mini-mappa non interattiva del dettaglio: un solo pin sulla posizione
 // della sagra. Se le coordinate non sono valide non renderizza nulla.
-export default function SagraMap({ sagra }: { sagra: Sagra }) {
+export default function SagraMap({ sagra }: { sagra: Pick<Sagra, "lat" | "leng"> }) {
     const hasCoords = Number.isFinite(sagra.lat) && Number.isFinite(sagra.leng);
 
     const featureCollection = useMemo<GeoJSON.FeatureCollection>(

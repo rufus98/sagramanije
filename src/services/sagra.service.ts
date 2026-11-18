@@ -13,16 +13,21 @@ const NearbyResponse = z.object({
     risultati: z.array(Sagra)
 })
 
-// L'endpoint ordina già i risultati dal più vicino.
-const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng: number | null; raggioKm?: number }, signal?: AbortSignal): Promise<Sagra[]> => {
+type NearbyOptions = {
+    lat: number | null;
+    lng: number | null;
+    raggioKm?: number;
+};
 
-    let path = "/sagre/vicine"
-    
-    if(lat !== null && lng !== null) {
-        path+=`?lat=${lat}&leng=${lng}`
-        if(raggioKm !== -1) path+= `&raggio_km=${raggioKm}`
+const getNearbySagre = async ({ lat, lng, raggioKm }: NearbyOptions, signal?: AbortSignal): Promise<Sagra[]> => {
+    const params = new URLSearchParams();
+    if (lat !== null && lng !== null) {
+        params.set("lat", String(lat));
+        params.set("leng", String(lng));
+        if (raggioKm !== undefined && raggioKm > 0) params.set("raggio_km", String(raggioKm));
     }
-
+    const query = params.toString();
+    const path = query ? `/sagre/vicine?${query}` : "/sagre/vicine";
     const response = await apiFetch(path, { signal })
 
     if (!response.ok) {
@@ -38,7 +43,7 @@ const getNearbySagre = async ({ lat, lng, raggioKm }: { lat: number | null; lng:
         throw parsed.error
     }
 
-    return parsed.data.risultati
+    return parsed.data.risultati;
 }
 
 const resolveSlugToId = async (slug: string, signal?: AbortSignal): Promise<number> => {

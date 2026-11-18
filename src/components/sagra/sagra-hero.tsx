@@ -12,10 +12,11 @@ const IMAGE_FADE_DURATION = 400;
 
 // Immagine di testa del dettaglio con overlay scuro che sfuma
 // dentro insieme alla foto (niente comparsa "a scatto").
-export default function SagraHero({ source }: { source?: string | null }) {
+export default function SagraHero({ source, fallbackCover }: { source?: string | null; fallbackCover?: number }) {
     // Se all'ingresso la foto c'è già (passata dalla card, in cache) la mostriamo
     // subito senza fade; il fade serve solo quando arriva dopo (da rete).
     const hasInitialSource = useRef(!!source).current
+    const [failedUrl, setFailedUrl] = useState<string | null>(null)
     const [viewerVisible, setViewerVisible] = useState(false)
     const { top, left } = useBackButtonOffset()
 
@@ -25,9 +26,10 @@ export default function SagraHero({ source }: { source?: string | null }) {
     return (
         <View style={{ height: DETAIL_IMAGE_HEIGHT }}>
             {/* Livello di base: se la foto manca o non è ancora arrivata, resta visibile */}
-            <ImagePlaceholder />
+            {fallbackCover ? <Image source={fallbackCover} style={StyleSheet.absoluteFill} contentFit="cover" /> : <ImagePlaceholder />}
             <Image
-                source={source}
+                source={source === failedUrl ? null : source}
+                onError={() => setFailedUrl(source ?? null)}
                 style={StyleSheet.absoluteFill}
                 contentFit="cover"
                 transition={hasInitialSource ? 0 : IMAGE_FADE_DURATION}
@@ -37,7 +39,7 @@ export default function SagraHero({ source }: { source?: string | null }) {
                 pointerEvents="none"
                 style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(0,0,0,0.35)" }, overlayStyle]}
             />
-            {source && (
+            {source && source !== failedUrl && (
                 <>
                     <Pressable
                         onPress={() => setViewerVisible(true)}

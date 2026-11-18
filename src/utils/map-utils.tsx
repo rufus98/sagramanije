@@ -1,8 +1,10 @@
-import { Sagra } from "@/types/sagra";
+import type { Sagra } from "@/types/sagra";
 import { Linking, Platform } from "react-native";
 
 // apre l'app mappe nativa con le indicazioni verso la sagra
-function openDirections(sagra: Sagra) {
+export type MapDestination = Pick<Sagra, "lat" | "leng" | "nome_sagra">;
+
+function openDirections(sagra: MapDestination) {
     const { lat, leng } = sagra;
     const label = encodeURIComponent(sagra.nome_sagra);
     const url = Platform.select({

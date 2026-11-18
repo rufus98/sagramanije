@@ -30,6 +30,8 @@ export default function BackButton({ backgroundColor = Colors.background }: { ba
 
     return (
         <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Indietro"
             onPress={handleBack}
             className="absolute z-10 p-5 rounded-3xl"
             style={{ backgroundColor, top, left }}

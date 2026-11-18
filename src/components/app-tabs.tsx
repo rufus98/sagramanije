@@ -1,3 +1,4 @@
+import { useMarketSeason } from '@/context/market-season';
 import { Colors } from '@/constants/theme';
 import { Tabs } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
@@ -5,11 +6,14 @@ import { Image, Platform, StyleSheet, useWindowDimensions } from 'react-native';
 import type { ColorValue, ImageSourcePropType } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const TAB_BAR_WIDTH = 220;
-
 const tabs = [
   {
-    name: 'index',
+    name: 'mercatini',
+    label: 'Mercatini',
+    icon: require('@/assets/images/tabIcons/tree-pine.png'),
+  },
+  {
+    name: 'sagre',
     label: 'Sagre',
     icon: require('@/assets/images/tabIcons/utensils-crossed.png'),
   },
@@ -28,6 +32,15 @@ const iosMajorVersion =
   Platform.OS === 'ios' ? Number.parseInt(String(Platform.Version), 10) : null;
 const usesPreIos26Tabs = iosMajorVersion !== null && iosMajorVersion < 26;
 const selectedNativeIconColor = Platform.OS === 'android' ? '#fff' : Colors.primary;
+const FLOATING_BAR_HEIGHT = 64;
+const FLOATING_BAR_MIN_OFFSET = 12;
+
+export function useTabScrollBottomPadding() {
+  const { bottom } = useSafeAreaInsets();
+  return usesPreIos26Tabs
+    ? FLOATING_BAR_HEIGHT + Math.max(bottom, FLOATING_BAR_MIN_OFFSET) + 16
+    : 40;
+}
 
 type TabIconProps = {
   color: ColorValue;
@@ -39,11 +52,14 @@ function TabIcon({ color, source }: TabIconProps) {
 }
 
 function PreIos26Tabs() {
+  const { inSeason } = useMarketSeason();
+  const tabBarWidth = inSeason ? 300 : 220;
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
 
   return (
     <Tabs
+      initialRouteName={inSeason ? 'mercatini' : 'sagre'}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.primary,
@@ -52,26 +68,29 @@ function PreIos26Tabs() {
         tabBarStyle: [
           styles.tabBar,
           {
-            bottom: Math.max(insets.bottom, 12),
-            start: (screenWidth - TAB_BAR_WIDTH) / 2,
+            bottom: Math.max(insets.bottom, FLOATING_BAR_MIN_OFFSET),
+            width: Math.min(tabBarWidth, screenWidth),
+            start: Math.max(0, (screenWidth - tabBarWidth) / 2),
           },
         ],
       }}>
       {tabs.map(({ icon, label, name }) => (
-        <Tabs.Screen
-          key={name}
-          name={name}
-          options={{
-            title: label,
-            tabBarIcon: ({ color }) => <TabIcon color={color} source={icon} />,
-          }}
-        />
+        <Tabs.Protected key={name} guard={name !== 'mercatini' || inSeason}>
+          <Tabs.Screen
+            name={name}
+            options={{
+              title: label,
+              tabBarIcon: ({ color }) => <TabIcon color={color} source={icon} />,
+            }}
+          />
+        </Tabs.Protected>
       ))}
     </Tabs>
   );
 }
 
 function SystemTabs() {
+  const { inSeason } = useMarketSeason();
   return (
     <NativeTabs
       backgroundColor={Colors.background}
@@ -86,7 +105,7 @@ function SystemTabs() {
         selected: { color: Colors.primary },
       }}>
       {tabs.map(({ icon, label, name }) => (
-        <NativeTabs.Trigger key={name} name={name}>
+        <NativeTabs.Trigger key={name} name={name} hidden={name === 'mercatini' && !inSeason}>
           <NativeTabs.Trigger.Label>{label}</NativeTabs.Trigger.Label>
           <NativeTabs.Trigger.Icon src={icon} renderingMode="template" />
         </NativeTabs.Trigger>
@@ -103,8 +122,7 @@ const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
     end: 'auto',
-    width: TAB_BAR_WIDTH,
-    height: 64,
+    height: FLOATING_BAR_HEIGHT,
     paddingTop: 6,
     paddingBottom: 6,
     backgroundColor: Colors.background,

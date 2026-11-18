@@ -59,6 +59,8 @@ export const Sagra = z.object({
     data_inizio: dataSchema,
     data_fine: dataSchema,
     citta: testo.nullable(),
+    indirizzo: testo.nullish(),
+    tipo: testo.nullish(),
     provincia: testo.nullable(),
     lat: z.number(),
     leng: z.number(),

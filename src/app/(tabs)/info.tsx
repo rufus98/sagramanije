@@ -1,3 +1,4 @@
+import { useTabScrollBottomPadding } from '@/components/app-tabs';
 import { ContactCard, ContactRow } from '@/components/info/contact-card';
 import { FeatureCard } from '@/components/info/feature-card';
 import { ReportSagraModal } from '@/components/info/report-sagra-modal';
@@ -11,16 +12,51 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function InfoScreen() {
   const [reportVisible, setReportVisible] = useState(false);
+  const paddingBottom = useTabScrollBottomPadding();
 
   return (
     <ThemedView className="flex-1">
       <SafeAreaView edges={['top']} className="flex-1">
         <ScrollView
           className="px-5 pt-3"
+          contentContainerStyle={{ paddingBottom }}
           contentInsetAdjustmentBehavior="automatic"
           showsVerticalScrollIndicator={false}
         >
-          <ThemedText type="title">Chi siamo</ThemedText>
+          <ThemedText type="title" accessibilityRole="header">Assistenza</ThemedText>
+          <View className="mt-3 gap-3">
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setReportVisible(true)}
+              className="flex-row items-center gap-4 rounded-3xl border border-primary/25 bg-primary/10 p-5 active:opacity-80"
+            >
+              <View className="rounded-2xl p-4" style={{ backgroundColor: `${Colors.primary}22` }}>
+                <PlusCircle color={Colors.primary} size={26} strokeWidth={1.75} />
+              </View>
+              <View className="flex-1">
+                <ThemedText className="font-title text-lg">Segnala una sagra che manca</ThemedText>
+                <ThemedText type="small" themeColor="textSecondary" className="mt-1">
+                  Raccontaci quello che sai sull’evento.
+                </ThemedText>
+              </View>
+              <ChevronRight color={Colors.textSecondary} size={22} />
+            </Pressable>
+
+            <ContactCard>
+              <ContactRow
+                icon={Mail}
+                label="Email assistenza"
+                value="sagramanije@gmail.com"
+                onPress={() =>
+                  Linking.openURL(
+                    `mailto:sagramanije@gmail.com?subject=${encodeURIComponent('Assistenza Sagramanije')}`
+                  )
+                }
+              />
+            </ContactCard>
+          </View>
+
+          <ThemedText type="subtitle" accessibilityRole="header" className="mt-8">Chi siamo</ThemedText>
           <ThemedText className="mt-2" themeColor="textSecondary">
             <ThemedText className="font-bold">Sagramanije</ThemedText> nasce dalla voglia di riportare la
             gente nelle piazze. Mappiamo migliaia di sagre e feste di paese in tutta Abruzzo, così puoi
@@ -47,46 +83,6 @@ export default function InfoScreen() {
               description="Cercare e scoprire sagre non costa nulla, per tutti."
             />
           </View>
-
-          <ThemedText type="subtitle" className="mt-8">
-            Assistenza
-          </ThemedText>
-          <ThemedText className="mt-2 mb-4" themeColor="textSecondary">
-            Per domande, problemi tecnici o suggerimenti sull'app, contatta il nostro supporto.
-          </ThemedText>
-          <ContactCard>
-            <ContactRow
-              icon={Mail}
-              label="Email assistenza"
-              value="sagramanije@gmail.com"
-              onPress={() =>
-                Linking.openURL(
-                  `mailto:sagramanije@gmail.com?subject=${encodeURIComponent('Assistenza Sagramanije')}`
-                )
-              }
-            />
-          </ContactCard>
-
-          <ThemedText type="subtitle" className="mt-8 mb-4">
-            Contribuisci
-          </ThemedText>
-          <Pressable
-            onPress={() => setReportVisible(true)}
-            className="flex-row items-center gap-4 rounded-3xl bg-white p-5 active:opacity-80"
-          >
-            <View className="rounded-2xl p-4" style={{ backgroundColor: `${Colors.primary}22` }}>
-              <PlusCircle color={Colors.primary} size={26} strokeWidth={1.75} />
-            </View>
-            <View className="flex-1">
-              <ThemedText className="font-title text-lg">Segnalaci una sagra</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary" className="mt-1">
-                Manca una sagra dalla mappa? Aiutaci ad aggiungerla.
-              </ThemedText>
-            </View>
-            <ChevronRight color={Colors.textSecondary} size={22} />
-          </Pressable>
-
-          <View className="h-10" />
         </ScrollView>
       </SafeAreaView>
 
