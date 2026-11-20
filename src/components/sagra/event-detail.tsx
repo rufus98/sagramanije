@@ -28,8 +28,8 @@ export default function EventDetail({ poster, fallbackCover, actionColor, action
         <ThemedView className="px-4 pt-4 flex-row gap-3" style={{ paddingBottom: Math.max(insets.bottom, 16) }}>
           <ShareButton {...actions.share} />
           <TouchableOpacity accessibilityRole="button" onPress={() => mapUtils.openDirections(actions.destination)}
-            style={actionColor ? { backgroundColor: actionColor, shadowColor: actionColor } : undefined}
-            className="flex-1 py-4 bg-primary rounded-3xl flex-row gap-3 items-center justify-center shadow-xl shadow-primary/20">
+            style={actionColor ? { backgroundColor: actionColor } : undefined}
+            className={`flex-1 py-4 bg-primary rounded-3xl flex-row gap-3 items-center justify-center ${actionColor ? '' : 'shadow-xl shadow-primary/20'}`}>
             <MapPin color="#fff" />
             <ThemedText className="font-bold font-title" style={{ color: '#fff' }}>Come arrivare</ThemedText>
           </TouchableOpacity>

@@ -29,6 +29,13 @@ export function marketPlace(market: Sagra) {
   return [market.indirizzo, town].filter(Boolean).join(' · ');
 }
 
+export function marketHref({ id, distanza_km }: Pick<Sagra, 'id' | 'distanza_km'>) {
+  return {
+    pathname: '/mercatino/[id]' as const,
+    params: { id: String(id), ...(distanza_km != null && { distanza: String(distanza_km) }) },
+  };
+}
+
 export function searchMarkets(markets: Sagra[], search: string) {
   const query = search.trim().toLocaleLowerCase('it');
   return markets.filter(market => isMarket(market) &&

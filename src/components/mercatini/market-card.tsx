@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { MapPin } from 'lucide-react-native';
+import { Calendar, MapPin } from 'lucide-react-native';
+import DateFormatter from '@/components/date-formatter';
 import { ThemedText } from '@/components/themed-text';
+import { MarketColors } from '@/constants/theme';
 import { formatDistance } from '@/services/sagra.service';
 import type { Sagra } from '@/types/sagra';
-import { marketPlace } from '@/utils/mercatini';
+import { marketHref, marketPlace } from '@/utils/mercatini';
 import { marketCover } from './market-cover';
 
 type Props = { market: Sagra };
@@ -18,9 +20,7 @@ export default function MarketCard({ market }: Props) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   return (
     <TouchableOpacity accessibilityRole="button" activeOpacity={0.8}
-      onPress={() => router.push({ pathname: '/mercatino/[id]', params: {
-        id: String(market.id), ...(distance != null && { distanza: String(distance) }),
-      } })}
+      onPress={() => router.push(marketHref(market))}
       className="overflow-hidden rounded-3xl bg-white">
       <View className="h-36">
         <Image source={marketCover(market.id)} contentFit="cover" style={StyleSheet.absoluteFill} />
@@ -29,7 +29,7 @@ export default function MarketCard({ market }: Props) {
             onError={() => setFailedUrl(market.locandina)} />
         )}
         <View className="flex-row justify-between items-start p-4">
-          <View className="rounded-full bg-[#983749] px-3 py-2">
+          <View className="rounded-full px-3 py-2" style={{ backgroundColor: MarketColors.berry }}>
             <ThemedText type="smallBold" style={{ color: '#fff' }}>Mercatino di Natale</ThemedText>
           </View>
           {distance != null && (
@@ -43,6 +43,11 @@ export default function MarketCard({ market }: Props) {
           <MapPin size={14} color="#796c61" />
           <ThemedText className="flex-1" type="small" themeColor="textSecondary">{place}</ThemedText>
         </View>}
+        <View className="mt-3 self-start flex-row items-center gap-2 rounded-xl px-3 py-1.5"
+          style={{ backgroundColor: MarketColors.blush }}>
+          <Calendar size={16} color={MarketColors.berry} />
+          <DateFormatter sagra={market} />
+        </View>
       </View>
     </TouchableOpacity>
   );

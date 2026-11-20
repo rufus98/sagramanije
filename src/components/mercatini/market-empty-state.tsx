@@ -1,5 +1,6 @@
 import { Pressable, View } from 'react-native';
 import Svg, { Circle, Ellipse, Path, Rect } from 'react-native-svg';
+import { MarketColors } from '@/constants/theme';
 import { ThemedText } from '@/components/themed-text';
 
 function WinterStall() {
@@ -21,12 +22,12 @@ function WinterStall() {
         <Path d="M96 90h55m-55 9h55" fill="none" stroke="#b08265" strokeWidth={2} />
         <Rect x={160} y={83} width={17} height={20} rx={2} fill="#f9d38f" />
         <Path d="M168.5 83v20m-8.5-10h17" stroke="#95684d" strokeWidth={2} />
-        <Path d="M81 76l11-23h88l13 23Z" fill="#a44750" />
+        <Path d="M81 76l11-23h88l13 23Z" fill={MarketColors.berry} />
         <Path d="m98 55-7 21h11l5-21zm22 0-3 21h11l1-21zm22 0 1 21h11l-3-21zm22 0 6 21h11l-8-21z" fill="#f6ddad" />
         <Path d="M88 57q0-7 8-7h80q8 0 9 8l-22-1q-8 4-16 0l-26 1q-7 4-15 0Z" fill="#fffaf0" />
         <Rect x={84} y={108} width={105} height={5} rx={2} fill="#865e4c" />
         <Circle cx={124} cy={94} r={6} stroke="#456b58" strokeWidth={4} fill="none" />
-        <Path d="m119 88 5 1 5-2-1 5-4-2-4 2Z" fill="#ab414b" />
+        <Path d="m119 88 5 1 5-2-1 5-4-2-4 2Z" fill={MarketColors.berry} />
         <Path d="M57 129q17-7 31-3t27 1m52 4q14-4 25-2" fill="none" stroke="#fffaf0" strokeWidth={4} strokeLinecap="round" />
         <Path d="m88 29 1.4 4.2 4.2 1.4-4.2 1.4L88 40l-1.4-4.6-4.1-1.4 4.1-1.4Z" fill="#cfa969" />
       </Svg>
@@ -38,14 +39,15 @@ export default function MarketEmptyState({ onClearSearch }: { onClearSearch?: ()
   return (
     <View className="items-center px-4 py-6">
       <WinterStall />
-      <ThemedText type="subtitle" className="mt-3 text-center" style={{ color: '#174d3f' }}>
+      <ThemedText type="subtitle" className="mt-3 text-center" style={{ color: MarketColors.pine }}>
         {onClearSearch ? 'Nessun mercatino trovato' : 'Ancora nessun mercatino'}
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary" className="mt-2 max-w-72 text-center">
         {onClearSearch ? 'Prova con un altro nome o con un comune vicino.' : 'Qui troverai i mercatini di Natale in Abruzzo appena saranno in catalogo.'}
       </ThemedText>
       {onClearSearch && (
-        <Pressable onPress={onClearSearch} accessibilityRole="button" className="mt-4 rounded-2xl bg-[#174d3f] px-5 py-3 active:opacity-75">
+        <Pressable onPress={onClearSearch} accessibilityRole="button" style={{ backgroundColor: MarketColors.berry }}
+          className="mt-4 rounded-2xl px-5 py-3 active:opacity-75">
           <ThemedText type="smallBold" style={{ color: '#fff' }}>Mostra tutti i mercatini</ThemedText>
         </Pressable>
       )}

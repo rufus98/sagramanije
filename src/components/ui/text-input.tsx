@@ -8,12 +8,14 @@ type FilterTextInputProps = {
     placeholder?: string;
     value?: string;
     onChangeText?: (text: string) => void;
+    selectionColor?: string;
 };
 
 export function FilterTextInput({
     placeholder = 'Cerca sagre o città...',
     value,
     onChangeText,
+    selectionColor = Colors.primary,
 }: FilterTextInputProps) {
     const theme = useTheme();
 
@@ -37,7 +39,7 @@ export function FilterTextInput({
                 style={{ color: theme.text }}
                 value={value}
                 onChangeText={onChangeText}
-                selectionColor={Colors.primary}
+                selectionColor={selectionColor}
             />
         </View>
     );

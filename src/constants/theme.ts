@@ -16,6 +16,12 @@ export const Colors = {
   primary: '#ec5a35',
 } as const;
 
+export const MarketColors = {
+  pine: '#00682d',
+  berry: '#b51620',
+  blush: '#ffedeb',
+} as const;
+
 export type ThemeColor = keyof typeof Colors;
 
 export const Fonts = Platform.select({

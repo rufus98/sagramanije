@@ -1,10 +1,12 @@
 import { Pressable, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
+import { Colors } from "@/constants/theme";
 
 type ErrorStateProps = {
     title?: string;
     message?: string;
+    actionColor?: string;
     onRetry?: () => void;
     isRetrying?: boolean;
 };
@@ -12,6 +14,7 @@ type ErrorStateProps = {
 export default function ErrorState({
     title = "Qualcosa è andato storto",
     message = "Non siamo riusciti a caricare le sagre. Controlla la connessione e riprova.",
+    actionColor = Colors.primary,
     onRetry,
     isRetrying = false,
 }: ErrorStateProps) {
@@ -23,7 +26,8 @@ export default function ErrorState({
                 <Pressable
                     onPress={onRetry}
                     disabled={isRetrying}
-                    className={`mt-2 rounded-full bg-primary px-6 py-3 active:opacity-80 ${isRetrying ? "opacity-50" : ""}`}
+                    className={`mt-2 rounded-full px-6 py-3 active:opacity-80 ${isRetrying ? "opacity-50" : ""}`}
+                    style={{ backgroundColor: actionColor }}
                 >
                     <ThemedText type="smallBold" themeColor="background">
                         {isRetrying ? "Riprovo…" : "Riprova"}
